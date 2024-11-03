@@ -1,5 +1,5 @@
 {
-  "name": "basic-turborepo",
+  "name": "neo-starter",
   "private": true,
   "scripts": {
     "build": "turbo build",

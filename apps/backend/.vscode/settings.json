@@ -1,0 +1,13 @@
+{
+  "[json]": {
+    "editor.formatOnSave": true // Because eslint autoFixOnSave doesn't format json
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "javascript.preferences.importModuleSpecifierEnding": "js",
+}
