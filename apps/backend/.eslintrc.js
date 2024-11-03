@@ -11,8 +11,9 @@ module.exports = {
     },
     tsconfigRootDir: __dirname
   },
-  plugins: [ '@typescript-eslint', 'import' ],
+  plugins: [ '@typescript-eslint', 'import', 'unused-imports' ],
   root: true,
+  ignorePatterns: [ '**/dist/**/*.js' ],
   rules: {
     semi: [ 'error', 'always' ],
     quotes: [ 'error', 'single' ],
@@ -27,7 +28,18 @@ module.exports = {
       },
     ],
     'no-trailing-spaces': [ 'error', { 'ignoreComments': true } ],
-    'no-unused-vars': 'error',
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    'unused-imports/no-unused-imports': 'error',
+    'unused-imports/no-unused-vars': [
+      'warn',
+      {
+        'vars': 'all',
+        'varsIgnorePattern': '^_',
+        'args': 'after-used',
+        'argsIgnorePattern': '^_',
+      },
+    ],
     'import/no-dynamic-require': 'error',
     'object-curly-spacing': [ 'error', 'always' ],
     'array-bracket-spacing': [ 'error', 'always' ],

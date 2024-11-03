@@ -5,6 +5,8 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsx watch --clear-screen=false src/index.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "test": "vitest run"
   },
   "engines": {

@@ -48,7 +48,7 @@ export class Server {
 
     this.server = app.listen(PORT);
 
-    this.logger.info(`server (${NODE_ENV}) running on port http://${HOST}:${PORT}`);
+    this.logger.info(`server (${NODE_ENV}) running on port http://${HOST}:${PORT.toString()}`);
 
     process.on('SIGINT', this.gracefulShutdown);
     process.on('SIGTERM', this.gracefulShutdown);

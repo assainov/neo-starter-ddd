@@ -1,28 +1,27 @@
-import type { Request, RequestHandler, Response } from "express";
-import { GetUserResponse } from "./getUser/getUserResponse";
-import { GetUserParams } from "./getUser/getUserParams";
-import { SearchUsersResponse } from "./searchUsers/searchUsersResponse";
-import { searchUsersQuery } from "./searchUsers/searchUsersQuery";
-import { RegisterUserResponse } from "./registerUser/registerUserResponse";
-import { RegisterUserBody } from "./registerUser/registerUserBody";
-import { z } from "zod";
-import UserDtoSchema from "./userDtos/userDtoSchema";
-import { randomUUID } from "node:crypto";
-import { NotFoundError } from "@/customErrors/NotFoundError";
+import type { RequestHandler } from 'express';
+import { GetUserResponse } from './getUser/getUserResponse';
+import { GetUserParams } from './getUser/getUserParams';
+import { SearchUsersResponse } from './searchUsers/searchUsersResponse';
+import { searchUsersQuery } from './searchUsers/searchUsersQuery';
+import { RegisterUserResponse } from './registerUser/registerUserResponse';
+import { RegisterUserBody } from './registerUser/registerUserBody';
+import UserDtoSchema from './userDtos/userDtoSchema';
+import { randomUUID } from 'node:crypto';
+import { NotFoundError } from '@/customErrors/NotFoundError';
 
 export const users = [
   {
     id: '1',
-    name: "Alice",
-    email: "alice@example.com",
+    name: 'Alice',
+    email: 'alice@example.com',
     age: 42,
     createdAt: new Date(),
     updatedAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days later
   },
   {
     id: '2',
-    name: "Robert",
-    email: "Robert@example.com",
+    name: 'Robert',
+    email: 'Robert@example.com',
     age: 21,
     createdAt: new Date(),
     updatedAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days later
@@ -30,21 +29,21 @@ export const users = [
 ];
 
 class UserController {
-  public getUsers: RequestHandler<never, SearchUsersResponse, never, searchUsersQuery>  = (_req, res) => {
+  public getUsers: RequestHandler<never, SearchUsersResponse, never, searchUsersQuery> = (_req, res) => {
     res.status(200).send(users);
   };
 
-  public getUser: RequestHandler<GetUserParams, GetUserResponse, never, never> = async (req, res) => {
+  public getUser: RequestHandler<GetUserParams, GetUserResponse, never, never> = (req, res) => {
     const id = req.params.id;
 
     const user = users.find((user) => user.id === id);
 
-    if (!user) throw new NotFoundError("User not found");
-    
+    if (!user) throw new NotFoundError('User not found');
+
     res.status(200).send(user);
   };
 
-  public registerUser: RequestHandler<never, RegisterUserResponse, RegisterUserBody, never> = async (req, res) => {
+  public registerUser: RequestHandler<never, RegisterUserResponse, RegisterUserBody, never> = (req, res) => {
     const newUser = UserDtoSchema.parse({
       ...req.body,
       id: randomUUID(),

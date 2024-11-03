@@ -1,5 +1,5 @@
-import { commonValidations } from "@/validation/commonValidations";
-import { z } from "zod";
+import { commonValidations } from '@/validation/commonValidations';
+import { z } from 'zod';
 
 const getUserParamsSchema = z.object({
   id: commonValidations.id,
