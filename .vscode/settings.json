@@ -9,5 +9,5 @@
   "editor.guides.bracketPairs": "active",
   "editor.tabSize": 2,
   "editor.detectIndentation": false,
-  "javascript.preferences.importModuleSpecifierEnding": "js",
+  "javascript.preferences.importModuleSpecifierEnding": "js"
 }
