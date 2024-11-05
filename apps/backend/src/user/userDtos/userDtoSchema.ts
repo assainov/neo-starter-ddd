@@ -1,4 +1,4 @@
-import { commonValidations } from '@/validation/commonValidations';
+import { commonValidations } from '@/common/validation/commonValidations';
 import { z } from 'zod';
 
 const userDtoSchema = z.object({

@@ -1,11 +1,11 @@
 import { asClass, asValue, createContainer, InjectionMode } from 'awilix';
-import { Server } from './server';
-import { App } from './app';
-import { envConfig, EnvConfig } from './envConfig';
-import logger, { Logger } from './logger';
+import { HttpServer } from './__server/httpServer';
+import { App } from './__server/app';
+import { envConfig, EnvConfig } from './__server/envConfig';
+import logger, { Logger } from './common/logger';
 
 export type Registry = {
-  server: Server,
+  httpServer: HttpServer,
   app: App,
   container: Container,
   envConfig: EnvConfig,
@@ -19,7 +19,7 @@ const container = createContainer<Registry>({
 });
 
 container.register({
-  server: asClass(Server).singleton(),
+  httpServer: asClass(HttpServer).singleton(),
   app: asClass(App).singleton(),
   container: asValue(container),
   envConfig: asValue(envConfig),

@@ -20,6 +20,11 @@
         "^lint"
       ]
     },
+    "test": {
+      "dependsOn": [
+        "^test"
+      ]
+    },
     "lint:fix": {
       "dependsOn": [
         "^lint:fix"

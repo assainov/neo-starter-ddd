@@ -5,14 +5,14 @@ import scopedContainer from './middleware/scopedContainer';
 import requestLogger from './middleware/requestLogger';
 import errorHandler from './middleware/errorHandler';
 import rateLimiter from './middleware/rateLimiter';
-import { Container, Registry } from './container';
-import { healthCheckRouter } from './healthCheck/healthCheckRouter';
+import { Container, Registry } from '../container';
+import { healthCheckRouter } from '../healthCheck/healthCheckRouter';
 import { EnvConfig } from './envConfig';
 import nocache from 'nocache';
 
 import 'express-async-errors';
-import { userRouter } from './user/userRouter';
-import { openAPIRouter } from './swagger/openAPIRouter';
+import { userRouter } from '../user/userRouter';
+import { openAPIRouter } from '../swagger/openAPIRouter';
 
 export class App {
   private app!: Application;

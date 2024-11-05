@@ -1,5 +1,5 @@
 import pino from 'pino';
-import { envConfig } from './envConfig';
+import { envConfig } from '../__server/envConfig';
 
 const prettifyDevLogs = (envConfig.isProduction ? {} : {
   transport: {

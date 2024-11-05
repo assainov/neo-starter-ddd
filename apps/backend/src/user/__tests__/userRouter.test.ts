@@ -8,7 +8,7 @@ import { SearchUsersResponse } from '../searchUsers/searchUsersResponse';
 import { GetUserResponse } from '../getUser/getUserResponse';
 import { users } from '../userController';
 import { UserDto } from '../userDtos/userDtoSchema';
-import { ErrorResponse } from '@/ErrorResponse';
+import { ErrorResponse } from '@/common/ErrorResponse';
 import { App } from 'supertest/types';
 
 describe('User API Endpoints', () => {

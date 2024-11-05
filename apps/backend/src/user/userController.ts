@@ -7,7 +7,7 @@ import { RegisterUserResponse } from './registerUser/registerUserResponse';
 import { RegisterUserBody } from './registerUser/registerUserBody';
 import UserDtoSchema from './userDtos/userDtoSchema';
 import { randomUUID } from 'node:crypto';
-import { NotFoundError } from '@/customErrors/NotFoundError';
+import { NotFoundError } from '@/common/customErrors/NotFoundError';
 
 export const users = [
   {

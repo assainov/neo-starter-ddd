@@ -1,4 +1,4 @@
-import { envConfig } from '@/envConfig';
+import { envConfig } from '@/__server/envConfig';
 import type { Request } from 'express';
 import { rateLimit } from 'express-rate-limit';
 

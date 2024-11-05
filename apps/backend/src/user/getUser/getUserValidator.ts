@@ -1,4 +1,4 @@
-import { validateRequest } from '@/validation/validateRequest';
+import { validateRequest } from '@/common/validation/validateRequest';
 import getUserParamsSchema from './getUserParams';
 import { z } from 'zod';
 

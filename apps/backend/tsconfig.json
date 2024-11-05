@@ -15,6 +15,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
   },
-  "include": [".", "neo-env.d.ts",],
+  "include": [".", "./src/common/types/neo-env.d.ts",],
   "exclude": ["./node_modules", "**/*/node_modules", "./dist"]
   }

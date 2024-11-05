@@ -1,8 +1,8 @@
 import { App } from './app';
 import { EnvConfig } from './envConfig';
-import { Server as HttpServer } from 'http';
-import { Logger } from './logger';
-import { Container, Registry } from './container';
+import { Server } from 'http';
+import { Logger } from '../common/logger';
+import { Container, Registry } from '../container';
 
 /**
  * We want to start here so we can manage other infrastructure
@@ -10,11 +10,11 @@ import { Container, Registry } from './container';
  * memcache
  * express server
  */
-export class Server {
+export class HttpServer {
   private app: App;
   private envConfig: EnvConfig;
   private logger: Logger;
-  private server?: HttpServer;
+  private server?: Server;
   private container: Container;
 
   public constructor({ app, envConfig, logger, container }: Registry) {
@@ -48,7 +48,7 @@ export class Server {
 
     this.server = app.listen(PORT);
 
-    this.logger.info(`server (${NODE_ENV}) running on port http://${HOST}:${PORT.toString()}`);
+    this.logger.info(`http server (${NODE_ENV}) running at http://${HOST}:${PORT.toString()}`);
 
     process.on('SIGINT', this.gracefulShutdown);
     process.on('SIGTERM', this.gracefulShutdown);
