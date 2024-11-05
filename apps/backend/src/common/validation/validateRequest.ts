@@ -1,4 +1,4 @@
-import { ValidationError } from '@/common/customErrors/ValidationError';
+import { ValidationError } from '@neo/custom-errors';
 import { NextFunction, Request, Response } from 'express';
 import { ZodError, ZodSchema } from 'zod';
 

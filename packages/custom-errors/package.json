@@ -1,0 +1,24 @@
+{
+  "name": "@neo/custom-errors",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "default": "./src/index.ts"
+  },
+  "scripts": {
+    "clean": "rm -rf node_modules && rm -rf dist",
+    "lint": "eslint . --max-warnings 0"
+  },
+  "devDependencies": {
+    "@neo/eslint-config": "*",
+    "@neo/typescript-config": "*",
+    "@types/eslint": "^8.56.5",
+    "@types/node": "^20.11.24",
+    "eslint": "^8.57.0",
+    "pino-pretty": "^11.3.0",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "pino": "^9.5.0"
+  }
+}

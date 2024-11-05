@@ -1,6 +1,5 @@
-import { _BaseError } from '@/common/customErrors/_BaseError';
-import { InternalServerError } from '@/common/customErrors/InternalServerError';
 import { ErrorResponse } from '@/common/ErrorResponse';
+import { _BaseError, InternalServerError } from '@neo/custom-errors';
 import { logger } from '@neo/tools/logger';
 import type { ErrorRequestHandler, NextFunction, Request, RequestHandler, Response } from 'express';
 import { InsufficientScopeError, InvalidTokenError, UnauthorizedError } from 'express-oauth2-jwt-bearer';
