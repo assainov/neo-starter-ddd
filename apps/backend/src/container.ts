@@ -2,7 +2,7 @@ import { asClass, asValue, createContainer, InjectionMode } from 'awilix';
 import { HttpServer } from './__server/httpServer';
 import { App } from './__server/app';
 import { envConfig, EnvConfig } from './__server/envConfig';
-import logger, { Logger } from './common/logger';
+import { logger, Logger } from '@neo/tools/logger';
 
 export type Registry = {
   httpServer: HttpServer,

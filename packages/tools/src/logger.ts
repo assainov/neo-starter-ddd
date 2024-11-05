@@ -1,7 +1,8 @@
 import pino from 'pino';
-import { envConfig } from '../__server/envConfig';
 
-const prettifyDevLogs = (envConfig.isProduction ? {} : {
+const isProduction = process.env.NODE_ENV === 'production';
+
+const prettifyDevLogs = (isProduction ? {} : {
   transport: {
     target: 'pino-pretty',
     options: {
@@ -12,12 +13,12 @@ const prettifyDevLogs = (envConfig.isProduction ? {} : {
 });
 
 const pinoLogger = pino({
-  level: envConfig.MIN_LOG_LEVEL,
+  level: process.env.MIN_LOG_LEVEL,
   ...prettifyDevLogs
 });
 
 // A wrapper to accept multiple arguments for logger
-const logger = {
+export const logger = {
   trace: (...args: unknown[]): void => {
     args.map(arg => {
       pinoLogger.trace(arg);
@@ -52,4 +53,3 @@ const logger = {
 
 export type Logger = typeof logger;
 export const _pinoLogger = pinoLogger;
-export default logger;

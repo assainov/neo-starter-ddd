@@ -1,13 +1,18 @@
 {
   "extends": "@neo/typescript-config/base.json",
   "compilerOptions": {
-    "typeRoots": ["./node_modules/@types"],
+    "jsx": "react",
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
     "outDir": "./dist",
   },
-  "include": [".", "./src/common/types/neo-env.d.ts",],
-  "exclude": ["./node_modules", "**/*/node_modules", "./dist"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "./src/common/types/neo-env.d.ts", 
+  ],
+  "exclude": ["./node_modules", "./dist"]
   }
+

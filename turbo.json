@@ -15,6 +15,11 @@
         "!.next/cache/**"
       ]
     },
+    "clean": {
+      "dependsOn": [
+        "^clean"
+      ]
+    },
     "lint": {
       "dependsOn": [
         "^lint"
