@@ -1,19 +1,12 @@
 {
+  "extends": "@neo/typescript-config/base.json",
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "CommonJS",
-    "moduleResolution": "Node",
     "typeRoots": ["./node_modules/@types"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
     "outDir": "./dist",
-    "importsNotUsedAsValues": "remove",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
   },
   "include": [".", "./src/common/types/neo-env.d.ts",],
   "exclude": ["./node_modules", "**/*/node_modules", "./dist"]

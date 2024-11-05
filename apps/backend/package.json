@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "@neo/eslint-config": "*",
+    "@neo/typescript-config": "*",
     "@eslint/js": "^8.57.1",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
