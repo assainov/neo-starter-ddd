@@ -3,6 +3,7 @@ import { HttpServer } from './__server/httpServer';
 import { App } from './__server/app';
 import { envConfig, EnvConfig } from './__server/envConfig';
 import { logger, Logger } from '@neo/tools/logger';
+import { IEncryptionService, ITokenService } from '@neo/domain/user';
 
 export type Registry = {
   httpServer: HttpServer,
@@ -11,6 +12,8 @@ export type Registry = {
   envConfig: EnvConfig,
   logger: Logger,
   requestId?: string,
+  encryptionService: IEncryptionService,
+  tokenService: ITokenService
 }
 
 const container = createContainer<Registry>({

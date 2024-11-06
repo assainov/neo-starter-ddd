@@ -10,6 +10,14 @@ import { z } from 'zod';
 import { createApiRequestBody, createApiResponse } from '@/swagger/openAPIResponseBuilders';
 import getUserParamsSchema from './getUser/getUserParams';
 import registerUserBodySchema from './registerUser/registerUserBody';
+import loginUserBodySchema from './loginUser/loginUserBody';
+import loginUserValidator from './loginUser/loginUserValidator';
+import loginUserResponseSchema from './loginUser/loginUserResponse';
+import registerUserResponseSchema from './registerUser/registerUserResponse';
+import getUserResponseSchema from './getUser/getUserResponse';
+import searchUsersResponseSchema from './searchUsers/searchUsersResponse';
+import { authenticate } from '@/__server/middleware/authenticate';
+import meValidator from './me/meValidator';
 
 extendZodWithOpenApi(z);
 
@@ -22,29 +30,50 @@ userRegistry.registerPath({
   method: 'get',
   path: '/users',
   tags: [ 'Users' ],
-  responses: createApiResponse(z.array(userDtoSchema), 'Success'),
+  responses: createApiResponse(searchUsersResponseSchema, 'Success'),
 });
 
 userRouter.get('/', searchUsersValidator, userController.getUsers);
 
 userRegistry.registerPath({
   method: 'get',
+  path: '/users/me',
+  tags: [ 'Users' ],
+  responses: createApiResponse(userDtoSchema, 'Success'),
+});
+
+userRouter.get('/me', meValidator, authenticate, userController.me);
+
+userRegistry.registerPath({
+  method: 'get',
   path: '/users/{id}',
   tags: [ 'Users' ],
   request: { params: getUserParamsSchema },
-  responses: createApiResponse(userDtoSchema.optional(), 'Success'),
+  responses: createApiResponse(getUserResponseSchema, 'Success'),
 });
 
 userRouter.get('/:id', getUserValidator, userController.getUser);
 
 userRegistry.registerPath({
   method: 'post',
-  path: '/users',
+  path: '/users/register',
   tags: [ 'Users' ],
   request: {
     body: createApiRequestBody(registerUserBodySchema, 'User details to register')
   },
-  responses: createApiResponse(userDtoSchema, 'Success'),
+  responses: createApiResponse(registerUserResponseSchema, 'Success'),
 });
 
-userRouter.post('/', registerUserValidator, userController.registerUser);
+userRouter.post('/register', registerUserValidator, userController.registerUser);
+
+userRegistry.registerPath({
+  method: 'post',
+  path: '/users/login',
+  tags: [ 'Users' ],
+  request: {
+    body: createApiRequestBody(loginUserBodySchema, 'User login details')
+  },
+  responses: createApiResponse(loginUserResponseSchema, 'Success'),
+});
+
+userRouter.post('/login', loginUserValidator, userController.loginUser);

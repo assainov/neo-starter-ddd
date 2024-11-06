@@ -1,0 +1,26 @@
+{
+  "name": "@neo/security",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./encryptionService": "./src/encryptionService.ts",
+    "./jwtTokenService": "./src/jwtTokenService.ts"
+  },
+  "scripts": {
+    "clean": "rm -rf node_modules && rm -rf dist",
+    "lint": "eslint . --max-warnings 0"
+  },
+  "devDependencies": {
+    "@neo/eslint-config": "*",
+    "@neo/typescript-config": "*",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "^20.11.24",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@neo/domain": "*",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

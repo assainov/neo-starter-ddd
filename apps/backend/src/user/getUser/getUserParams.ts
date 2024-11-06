@@ -1,8 +1,7 @@
-import { commonValidations } from '@neo/tools/validation';
 import { z } from 'zod';
 
 const getUserParamsSchema = z.object({
-  id: commonValidations.id,
+  email: z.string().email(),
 });
 
 export type GetUserParams = z.infer<typeof getUserParamsSchema>;

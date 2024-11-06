@@ -36,6 +36,8 @@ const validationSchema = z.object({
     ])
     .default('info'),
 
+  JWT_SECRET: z.string().min(1),
+
   isProduction: z.boolean().default(false),
 });
 

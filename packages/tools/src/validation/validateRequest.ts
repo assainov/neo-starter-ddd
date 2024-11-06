@@ -1,3 +1,4 @@
+import { ValidationError } from '@neo/common-entities';
 import { NextFunction, Request, Response } from 'express';
 import { ZodError, ZodSchema } from 'zod';
 
