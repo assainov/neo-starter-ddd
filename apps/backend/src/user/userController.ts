@@ -7,7 +7,7 @@ import { RegisterUserResponse } from './registerUser/registerUserResponse';
 import { RegisterUserBody } from './registerUser/registerUserBody';
 import UserDtoSchema from './userDtos/userDtoSchema';
 import { randomUUID } from 'node:crypto';
-import { NotFoundError } from '@neo/custom-errors';
+import { NotFoundError } from '../../../../packages/common-entities/src';
 
 export const users = [
   {

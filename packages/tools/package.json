@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    "./logger": "./src/logger.ts"
+    "./logger": "./src/logger.ts",
+    "./validation": "./src/validation/index.ts"
   },
   "scripts": {
     "clean": "rm -rf node_modules && rm -rf dist",
@@ -19,6 +20,7 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
+    "@neo/common-entities": "*",
     "pino": "^9.5.0"
   }
 }

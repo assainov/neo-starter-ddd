@@ -1,4 +1,4 @@
-import { validateRequest } from '@/common/validation/validateRequest';
+import { validateRequest } from '@neo/tools/validation';
 import registerUserBodySchema from './registerUserBody';
 import { z } from 'zod';
 

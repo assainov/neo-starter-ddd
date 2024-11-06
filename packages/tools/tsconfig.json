@@ -1,5 +1,9 @@
 {
   "extends": "@neo/typescript-config/base.json",
-  "include": ["src"],
-  "exclude": ["./node_modules", "**/*/node_modules", "./dist"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "./src/common/types/neo-env.d.ts", 
+  ],
+  "exclude": ["./node_modules", "./dist"]
   }

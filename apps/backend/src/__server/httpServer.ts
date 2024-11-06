@@ -1,8 +1,8 @@
 import { App } from './app';
 import { EnvConfig } from './envConfig';
 import { Server } from 'http';
-import { Logger } from '../common/logger';
 import { Container, Registry } from '../container';
+import { Logger } from '@neo/tools/logger';
 
 /**
  * We want to start here so we can manage other infrastructure

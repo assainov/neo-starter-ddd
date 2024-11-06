@@ -1,4 +1,4 @@
-import { commonValidations } from '@/common/validation/commonValidations';
+import { commonValidations } from '@neo/tools/validation';
 import { z } from 'zod';
 
 const getUserParamsSchema = z.object({

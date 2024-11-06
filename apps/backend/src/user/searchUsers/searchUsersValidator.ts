@@ -1,4 +1,4 @@
-import { validateRequest } from '@/common/validation/validateRequest';
+import { validateRequest } from '@neo/tools/validation';
 import searchUsersQuerySchema from './searchUsersQuery';
 import { z } from 'zod';
 
