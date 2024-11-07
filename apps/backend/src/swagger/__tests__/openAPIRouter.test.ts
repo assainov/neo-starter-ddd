@@ -12,7 +12,9 @@ describe('OpenAPI Router', () => {
     let app: Application;
 
     beforeAll(() => {
-      app = container.resolve('app').configure();
+      const appServer = container.resolve('appServer');
+      appServer.configure();
+      app = appServer.app;
 
       // clean up function, called once after all tests run
       return async () => {

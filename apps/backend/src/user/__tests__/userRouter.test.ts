@@ -8,14 +8,16 @@ import { SearchUsersResponse } from '../searchUsers/searchUsersResponse';
 import { GetUserResponse } from '../getUser/getUserResponse';
 import { users } from '../userController';
 import { UserDto } from '../userDtos/userDtoSchema';
-import { ErrorResponse } from '@/common/ErrorResponse';
 import { App } from 'supertest/types';
+import { ErrorResponse } from '@neo/common-entities';
 
 describe('User API Endpoints', () => {
   let app: Application;
 
   beforeAll(() => {
-    app = container.resolve('app').configure();
+    const appServer = container.resolve('appServer');
+    appServer.configure();
+    app = appServer.app;
 
     // clean up function, called once after all tests run
     return async () => {
@@ -75,9 +77,10 @@ function compareUsers(mockUser?: UserDto, responseUser?: UserDto) {
   }
 
   expect(responseUser.id).toEqual(mockUser.id);
-  expect(responseUser.name).toEqual(mockUser.name);
+  expect(responseUser.firstName).toEqual(mockUser.firstName);
+  expect(responseUser.lastName).toEqual(mockUser.lastName);
   expect(responseUser.email).toEqual(mockUser.email);
-  expect(responseUser.age).toEqual(mockUser.age);
+  expect(responseUser.avatarUrl).toEqual(mockUser.avatarUrl);
   expect(new Date(responseUser.createdAt)).toEqual(mockUser.createdAt);
   expect(new Date(responseUser.updatedAt)).toEqual(mockUser.updatedAt);
 }

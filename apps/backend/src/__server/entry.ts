@@ -1,9 +1,9 @@
 import container from '../container';
 
-const { httpServer } = container.cradle;
+const appServer = container.resolve('appServer');
 
 try {
-  httpServer.start();
+  appServer.start();
 } catch (error) {
   console.error(error);
   process.exit(1);

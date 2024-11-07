@@ -41,6 +41,7 @@ module.exports = {
     'import/no-dynamic-require': 'error',
     'object-curly-spacing': [ 'error', 'always' ],
     'array-bracket-spacing': [ 'error', 'always' ],
-    '@typescript-eslint/explicit-member-accessibility': 'error'
+    '@typescript-eslint/explicit-member-accessibility': 'error',
+    "@typescript-eslint/no-unsafe-assignment": "off",
   }
 };

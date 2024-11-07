@@ -5,6 +5,7 @@ import { StatusCodes, getReasonPhrase } from 'http-status-codes';
 import type { LevelWithSilent } from 'pino';
 import { type CustomAttributeKeys, type Options, pinoHttp } from 'pino-http';
 import { envConfig } from '@/__server/envConfig';
+import { _pinoLogger } from '@neo/tools/logger';
 
 enum LogLevel {
   Fatal = 'fatal',
@@ -25,14 +26,14 @@ type PinoCustomProps = {
 
 const requestLogger = (options?: Options): RequestHandler[] => {
   const pinoOptions: Options = {
-    enabled: envConfig.isProduction,
+    logger: envConfig.isProduction ? undefined : _pinoLogger,
     customProps: customProps as unknown as Options['customProps'],
     redact: [],
     genReqId,
     customLogLevel,
     customSuccessMessage,
-    customReceivedMessage: (req) => `request received: ${req.method ?? 'UNKNOWN'} ${req.url ?? 'UNKNOWN'}`,
-    customErrorMessage: (_req, res) => `request errored with status code: ${res.statusCode.toString()}`,
+    customReceivedMessage: (req) => `REQUEST STARTED: ${req.method ?? '[METHOD]'} ${req.url ?? '[REQ URL]'}`,
+    customErrorMessage: (_req, res) => `REQUEST ERROR with status code: ${res.statusCode.toString()}`,
     customAttributeKeys,
     ...options,
   };
@@ -72,9 +73,9 @@ const customLogLevel = (_req: IncomingMessage, res: ServerResponse, err?: Error)
   return LogLevel.Info;
 };
 
-const customSuccessMessage = (req: IncomingMessage, res: ServerResponse) => {
+const customSuccessMessage = (req: IncomingMessage, res: ServerResponse, responseTime: number) => {
   if (res.statusCode === 404) return getReasonPhrase(StatusCodes.NOT_FOUND);
-  return `${req.method ?? 'UNKNOWN'} completed`;
+  return `REQUEST COMPLETED: ${req.method ?? '[METHOD]'} ${responseTime.toString()}ms`;
 };
 
 const genReqId = (req: IncomingMessage, res: ServerResponse) => {
