@@ -1,11 +1,12 @@
 import { StatusCodes } from 'http-status-codes';
 import request from 'supertest';
 
-import { generateOpenAPIDocument } from '../openAPIDocumentGenerator';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { Application } from 'express';
 import container from '@/container';
 import { App } from 'supertest/types';
+import { initializeOpenAPIModule } from '../_module.openAPI';
+import { initializeUserModule } from '@/user/_module.user';
 
 describe('OpenAPI Router', () => {
   describe('Swagger JSON route', () => {
@@ -23,7 +24,10 @@ describe('OpenAPI Router', () => {
     });
 
     it('should return Swagger JSON content', async () => {
-      const expectedResponse = generateOpenAPIDocument();
+      const { userRegistry } = initializeUserModule({ container });
+
+      const module = initializeOpenAPIModule(userRegistry);
+      const expectedResponse = module.openAPIDocument;
 
       // Act
       const response = await request(app as App).get('/swagger.json');

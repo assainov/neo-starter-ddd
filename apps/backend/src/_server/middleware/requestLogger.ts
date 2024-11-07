@@ -4,7 +4,7 @@ import type { Request, RequestHandler, Response } from 'express';
 import { StatusCodes, getReasonPhrase } from 'http-status-codes';
 import type { LevelWithSilent } from 'pino';
 import { type CustomAttributeKeys, type Options, pinoHttp } from 'pino-http';
-import { envConfig } from '@/__server/envConfig';
+import { envConfig } from '@/_server/envConfig';
 import { _pinoLogger } from '@neo/tools/logger';
 
 enum LogLevel {

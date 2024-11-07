@@ -3,7 +3,7 @@ import express, { type Request, type Response, type Router } from 'express';
 import { z } from 'zod';
 
 import { StatusCodes } from 'http-status-codes';
-import { createApiResponse } from '@/swagger/openAPIResponseBuilders';
+import { createApiResponse } from '@/swagger/utils/openAPIResponseBuilders';
 
 export const healthCheckRegistry = new OpenAPIRegistry();
 export const healthCheckRouter: Router = express.Router();

@@ -1,11 +1,10 @@
-import express, { type Request, type Response, type Router } from 'express';
+import express, { type Request, type Response } from 'express';
 import swaggerUi from 'swagger-ui-express';
 
 import { OpenAPIRegistry, OpenApiGeneratorV3 } from '@asteasolutions/zod-to-openapi';
 
-export const createOpenAPIRouter = (...listOfRegistries: OpenAPIRegistry[]) => {
-  const openAPIRouter: Router = express.Router();
-
+export const initializeOpenAPIModule = (...listOfRegistries: OpenAPIRegistry[]) => {
+  const openAPIRouter = express.Router();
   const registry = new OpenAPIRegistry(listOfRegistries);
   const generator = new OpenApiGeneratorV3(registry.definitions);
   const openAPIDocument = generator.generateDocument({
@@ -27,5 +26,5 @@ export const createOpenAPIRouter = (...listOfRegistries: OpenAPIRegistry[]) => {
 
   openAPIRouter.use('/', swaggerUi.serve, swaggerUi.setup(openAPIDocument));
 
-  return openAPIRouter;
+  return { openAPIRouter, openAPIDocument };
 };

@@ -10,8 +10,8 @@ import { healthCheckRouter } from '../healthCheck/healthCheckRouter';
 import nocache from 'nocache';
 
 import 'express-async-errors';
-import { createUserRouter } from '../user/createUserRouter';
-import { createOpenAPIRouter } from '../swagger/createOpenAPIRouter';
+import { initializeUserModule } from '../user/_module.user';
+import { initializeOpenAPIModule } from '../swagger/_module.openAPI';
 import { BaseServer } from './helpers/baseServer';
 
 export class AppServer extends BaseServer {
@@ -39,12 +39,13 @@ export class AppServer extends BaseServer {
     this.app.use(scopedContainer(this._container));
 
     // Routes
-    const { userRouter, userRegistry } = createUserRouter({ container: this._container });
+    const { userRouter, userRegistry } = initializeUserModule({ container: this._container });
     this.app.use('/health', healthCheckRouter);
     this.app.use('/users', userRouter);
 
     // Swagger UI
-    this.app.use(createOpenAPIRouter(userRegistry));
+    const { openAPIRouter } = initializeOpenAPIModule(userRegistry);
+    this.app.use(openAPIRouter);
 
     // Error handlers
     this.app.use(errorHandler());

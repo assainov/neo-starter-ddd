@@ -11,7 +11,7 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    "./src/__server/neo-env.d.ts", 
+    "src/_server/neoEnv.d.ts"
   ],
   "exclude": ["./node_modules", "./dist"]
   }

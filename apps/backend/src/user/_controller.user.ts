@@ -1,17 +1,13 @@
 import type { RequestHandler } from 'express';
-import { GetUserResponse } from './getUser/getUserResponse';
-import { GetUserParams } from './getUser/getUserParams';
-import { SearchUsersResponse } from './searchUsers/searchUsersResponse';
-import { searchUsersQuery } from './searchUsers/searchUsersQuery';
-import registerUserResponseSchema, { RegisterUserResponse } from './registerUser/registerUserResponse';
-import { RegisterUserBody } from './registerUser/registerUserBody';
 import { BadRequestError, InternalServerError, NotFoundError } from '@neo/common-entities';
 import { IEncryptionService, ITokenService, IUser, User } from '@neo/domain/user';
-import loginUserResponseSchema, { LoginUserResponse } from './loginUser/loginUserResponse';
-import { LoginUserBody } from './loginUser/loginUserBody';
-import userDtoSchema from './userDtos/userDtoSchema';
-import meResponseSchema, { MeResponse } from './me/meResponse';
-import { UserContainerRegistry } from './createUserRouter';
+import userDtoSchema from './_common.user';
+import { UserContainerRegistry } from './_container.user';
+import { UserDetailsResponse, userDetailsResponseSchema } from './details.user';
+import { SearchUsersQuery, SearchUsersResponse } from './search.user';
+import { GetUserParams, GetUserResponse } from './get.user';
+import { RegisterUserBody, RegisterUserResponse, registerUserResponseSchema } from './register.user';
+import { LoginUserBody, LoginUserResponse, loginUserResponseSchema } from './login.user';
 
 export const users: IUser[] = [
   {
@@ -51,11 +47,11 @@ export class UserController {
     this._tokenService = tokenService;
   }
 
-  public getUsers: RequestHandler<never, SearchUsersResponse, never, searchUsersQuery> = (_req, res) => {
+  public search: RequestHandler<never, SearchUsersResponse, never, SearchUsersQuery> = (_req, res) => {
     res.status(200).send(users);
   };
 
-  public getUser: RequestHandler<GetUserParams, GetUserResponse, never, never> = (req, res) => {
+  public get: RequestHandler<GetUserParams, GetUserResponse, never, never> = (req, res) => {
     const { email } = req.params;
 
     const user = users.find((user) => user.email === email);
@@ -65,7 +61,7 @@ export class UserController {
     res.status(200).send(user);
   };
 
-  public registerUser: RequestHandler<never, RegisterUserResponse, RegisterUserBody, never> = async (req, res) => {
+  public register: RequestHandler<never, RegisterUserResponse, RegisterUserBody, never> = async (req, res) => {
     const newUser = await User.create(req.body, this._encryptionService);
     const userObject = registerUserResponseSchema.parse(newUser);
 
@@ -73,7 +69,7 @@ export class UserController {
     res.status(200).send(userObject);
   };
 
-  public loginUser: RequestHandler<never, LoginUserResponse, LoginUserBody, never> = async (req, res) => {
+  public login: RequestHandler<never, LoginUserResponse, LoginUserBody, never> = async (req, res) => {
     const { email, password } = req.body;
 
     const userIndex = users.findIndex((user) => user.email === email);
@@ -91,7 +87,7 @@ export class UserController {
     res.status(200).send(loginUserResponseSchema.parse({ accessToken }));
   };
 
-  public me: RequestHandler<never, MeResponse, never, never> = (req, res) => {
+  public details: RequestHandler<never, UserDetailsResponse, never, never> = (req, res) => {
     const email = req.tokenPayload?.email;
 
     if (!email) throw new InternalServerError('Email not found in token payload');
@@ -100,6 +96,6 @@ export class UserController {
 
     if (!user) throw new BadRequestError('Invalid email or password');
 
-    res.status(200).send(meResponseSchema.parse(user));
+    res.status(200).send(userDetailsResponseSchema.parse(user));
   };
 }

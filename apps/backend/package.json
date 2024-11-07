@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsup",
     "clean": "rm -rf node_modules && rm -rf dist",
-    "dev": "tsx watch --clear-screen=false src/__server/entry.ts",
+    "dev": "tsx watch --clear-screen=false src/_server/entry.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run"
