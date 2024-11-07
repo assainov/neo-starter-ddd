@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { IUser, IUserRepository, User } from '@neo/domain/user';
+import { IUserRepository, User } from '@neo/domain/user';
 
 class UserRepository implements IUserRepository {
   private _prisma: PrismaClient;
@@ -8,12 +8,12 @@ class UserRepository implements IUserRepository {
     this._prisma = prismaClient;
   }
 
-  public async getAll(): Promise<IUser[]> {
+  public async getAll() {
     const dbUsers = await this._prisma.user.findMany();
     return dbUsers.map(u => new User(u));
   }
 
-  public async findByEmail(email: string): Promise<IUser | null> {
+  public async getByEmail(email: string) {
     const dbUser = await this._prisma.user.findFirst({
       where: { email }
     });
@@ -23,18 +23,18 @@ class UserRepository implements IUserRepository {
     return new User(dbUser);
   }
 
-  public async create(user: IUser): Promise<IUser> {
+  public async create(user: User) {
     const dbUser = await this._prisma.user.create({
-      data: user
+      data: user.toJSON()
     });
 
     return new User(dbUser);
   }
 
-  public async update(user: IUser): Promise<IUser> {
+  public async update(user: User) {
     const dbUser = await this._prisma.user.update({
       where: { email: user.email },
-      data: user
+      data: user.toJSON()
     });
 
     return new User(dbUser);

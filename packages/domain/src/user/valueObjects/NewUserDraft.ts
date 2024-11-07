@@ -3,6 +3,6 @@ export type NewUserDraft = {
   lastName: string;
   email: string;
   password: string;
-  avatarUrl?: string;
+  avatarUrl?: string | null;
   username?: string;
 };

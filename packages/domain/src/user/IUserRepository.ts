@@ -1,8 +1,8 @@
-import { IUser } from './IUser';
+import { User } from './User';
 
 export interface IUserRepository {
-  getAll: () => Promise<IUser[]>;
-  findByEmail: (email: string) => Promise<IUser | null>;
-  create: (user: IUser) => Promise<IUser>;
-  update: (user: IUser) => Promise<IUser>;
+  getAll: () => Promise<User[]>;
+  getByEmail: (email: string) => Promise<User | null>;
+  create: (user: User) => Promise<User>;
+  update: (user: User) => Promise<User>;
 }

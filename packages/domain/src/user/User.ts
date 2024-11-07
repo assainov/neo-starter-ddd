@@ -1,97 +1,58 @@
 import { IEncryptionService } from './IEncryptionService';
 import { ITokenService } from './ITokenService';
-import { IUser } from './IUser';
+import { UserProps } from './UserProps';
 import { LoginResult } from './valueObjects/LoginResult';
 import { NewUserDraft } from './valueObjects/NewUserDraft';
 
-export class User implements IUser {
-  public get id(): string | undefined { return this.#id; }
-  private set id(value: string | undefined) { this.#id = value; }
-  #id?: string;
+export class User {
+  #private: UserProps;
 
-  public get firstName(): string { return this.#firstName; }
-  private set firstName(value: string) { this.#firstName = value; }
-  #firstName!: string;
+  public get id(): string | undefined { return this.#private.id; }
+  private set id(value: string | undefined) { this.#private.id = value; }
 
-  public get lastName(): string { return this.#lastName; }
-  private set lastName(value: string) { this.#lastName = value; }
-  #lastName!: string;
+  public get firstName(): string { return this.#private.firstName; }
+  private set firstName(value: string) { this.#private.firstName = value; }
 
-  public get email(): string { return this.#email; }
-  private set email(value: string) { this.#email = value; }
-  #email!: string;
+  public get lastName(): string { return this.#private.lastName; }
+  private set lastName(value: string) { this.#private.lastName = value; }
 
-  public get createdAt(): Date { return this.#createdAt; }
-  private set createdAt(value: Date) { this.#createdAt = value; }
-  #createdAt!: Date;
+  public get email(): string { return this.#private.email; }
+  private set email(value: string) { this.#private.email = value; }
 
-  public get updatedAt(): Date { return this.#updatedAt; }
-  private set updatedAt(value: Date) { this.#updatedAt = value; }
-  #updatedAt!: Date;
+  public get createdAt(): Date { return this.#private.createdAt; }
+  private set createdAt(value: Date) { this.#private.createdAt = value; }
 
-  public get registeredAt(): Date { return this.#registeredAt; }
-  private set registeredAt(value: Date) { this.#registeredAt = value; }
-  #registeredAt!: Date;
+  public get updatedAt(): Date { return this.#private.updatedAt; }
+  private set updatedAt(value: Date) { this.#private.updatedAt = value; }
 
-  public get lastLoginAt(): Date { return this.#lastLoginAt; }
-  private set lastLoginAt(value: Date) { this.#lastLoginAt = value; }
-  #lastLoginAt!: Date;
+  public get registeredAt(): Date { return this.#private.registeredAt; }
+  private set registeredAt(value: Date) { this.#private.registeredAt = value; }
 
-  public get loginsCount(): number { return this.#loginsCount; }
-  private set loginsCount(value: number) { this.#loginsCount = value; }
-  #loginsCount!: number;
+  public get lastLoginAt(): Date { return this.#private.lastLoginAt; }
+  private set lastLoginAt(value: Date) { this.#private.lastLoginAt = value; }
 
-  public get avatarUrl(): string | undefined { return this.#avatarUrl; }
-  private set avatarUrl(value: string | undefined) { this.#avatarUrl = value; }
-  #avatarUrl?: string;
+  public get loginsCount(): number { return this.#private.loginsCount; }
+  private set loginsCount(value: number) { this.#private.loginsCount = value; }
 
-  public get username(): string { return this.#username; }
-  private set username(value: string) { this.#username = value; }
-  #username!: string;
+  public get avatarUrl(): string | undefined | null { return this.#private.avatarUrl; }
+  private set avatarUrl(value: string | undefined) { this.#private.avatarUrl = value; }
 
-  public get passwordHash(): string { return this.#passwordHash; }
-  private set passwordHash(value: string) { this.#passwordHash = value; }
-  #passwordHash!: string;
+  public get username(): string { return this.#private.username; }
+  private set username(value: string) { this.#private.username = value; }
 
-  public constructor({
-    id,
-    firstName,
-    lastName,
-    email,
-    createdAt,
-    updatedAt,
-    registeredAt,
-    lastLoginAt,
-    loginsCount,
-    username,
-    passwordHash,
-    avatarUrl,
-  }:{
-    id?: string,
-    firstName: string,
-    lastName: string,
-    email: string,
-    createdAt: Date,
-    updatedAt: Date,
-    registeredAt: Date,
-    lastLoginAt: Date,
-    loginsCount: number,
-    username: string,
-    passwordHash: string,
-    avatarUrl?: string | null,
-  }) {
-    this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.email = email;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-    this.registeredAt = registeredAt;
-    this.lastLoginAt = lastLoginAt;
-    this.loginsCount = loginsCount;
-    this.avatarUrl = avatarUrl || undefined;
-    this.username = username;
-    this.passwordHash = passwordHash;
+  public get passwordHash(): string { return this.#private.passwordHash; }
+  private set passwordHash(value: string) { this.#private.passwordHash = value; }
+
+  public toJSON() {
+    return this.#private;
+  }
+
+  public static toClass(props: UserProps) {
+    return new User(props);
+  }
+
+  public constructor(props: UserProps) {
+    this.#private = props;
   }
 
   public static async create(

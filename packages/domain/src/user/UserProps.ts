@@ -1,4 +1,4 @@
-export interface IUser {
+export type UserProps = {
   id?: string;
   firstName: string;
   lastName: string;
@@ -8,7 +8,7 @@ export interface IUser {
   registeredAt: Date;
   lastLoginAt: Date;
   loginsCount: number;
-  avatarUrl?: string;
+  avatarUrl?: string | null;
   username: string;
   passwordHash: string;
 }

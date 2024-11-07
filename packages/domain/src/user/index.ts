@@ -1,6 +1,6 @@
 export * from './IEncryptionService';
 export * from './ITokenService';
 export * from './User';
-export * from './IUser';
+export * from './UserProps';
 export * from './valueObjects/NewUserDraft';
 export * from './IUserRepository';

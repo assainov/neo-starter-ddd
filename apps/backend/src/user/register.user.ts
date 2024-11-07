@@ -7,7 +7,7 @@ export const registerUserBodySchema = z.object({
   lastName: z.string().min(2),
   email: z.string().email(),
   password: z.string().min(6),
-  avatarUrl: z.string().min(4).url().optional(),
+  avatarUrl: z.string().min(4).url().optional().nullable(),
   username: z.string().min(4).optional()
 });
 

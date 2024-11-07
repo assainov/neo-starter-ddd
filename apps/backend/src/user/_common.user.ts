@@ -9,7 +9,7 @@ const userDtoSchema = z.object({
   registeredAt: z.date(),
   lastLoginAt: z.date(),
   loginsCount: z.number(),
-  avatarUrl: z.string().optional(),
+  avatarUrl: z.string().optional().nullable(),
   username: z.string(),
   passwordHash: z.string(),
 });
