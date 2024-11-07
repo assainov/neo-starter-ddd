@@ -1,0 +1,26 @@
+{
+  "name": "@neo/persistence",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./prisma": "./src/prisma/index.ts"
+  },
+  "scripts": {
+    "clean": "rm -rf node_modules && rm -rf dist",
+    "dev": "prisma studio",
+    "lint": "eslint . --max-warnings 0"
+  },
+  "devDependencies": {
+    "@neo/eslint-config": "*",
+    "@neo/typescript-config": "*",
+    "@types/node": "^20.11.24",
+    "prisma": "^5.22.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@neo/domain": "*",
+    "@prisma/client": "^5.22.0",
+    "dotenv": "^16.4.5"
+  }
+}

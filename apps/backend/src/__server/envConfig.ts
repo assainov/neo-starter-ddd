@@ -19,11 +19,7 @@ const validationSchema = z.object({
   COMMON_RATE_LIMIT_MAX_REQUESTS: z.coerce.number().min(1).default(1000),
   COMMON_RATE_LIMIT_WINDOW_MS: z.coerce.number().min(1).default(20),
 
-  DATABASE_HOST: z.string().min(5),
-  DATABASE_PORT: z.string().min(1),
-  DATABASE_USER: z.string().min(1),
-  DATABASE_PASSWORD: z.string().min(1),
-  DATABASE_NAME: z.string().min(1),
+  DATABASE_URL: z.string().url(),
 
   MIN_LOG_LEVEL: z
     .union([

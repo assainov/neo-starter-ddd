@@ -5,6 +5,10 @@ import { LoginResult } from './valueObjects/LoginResult';
 import { NewUserDraft } from './valueObjects/NewUserDraft';
 
 export class User implements IUser {
+  public get id(): string | undefined { return this.#id; }
+  private set id(value: string | undefined) { this.#id = value; }
+  #id?: string;
+
   public get firstName(): string { return this.#firstName; }
   private set firstName(value: string) { this.#firstName = value; }
   #firstName!: string;
@@ -50,6 +54,7 @@ export class User implements IUser {
   #passwordHash!: string;
 
   public constructor({
+    id,
     firstName,
     lastName,
     email,
@@ -62,6 +67,7 @@ export class User implements IUser {
     passwordHash,
     avatarUrl,
   }:{
+    id?: string,
     firstName: string,
     lastName: string,
     email: string,
@@ -72,8 +78,9 @@ export class User implements IUser {
     loginsCount: number,
     username: string,
     passwordHash: string,
-    avatarUrl?: string,
+    avatarUrl?: string | null,
   }) {
+    this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
@@ -82,7 +89,7 @@ export class User implements IUser {
     this.registeredAt = registeredAt;
     this.lastLoginAt = lastLoginAt;
     this.loginsCount = loginsCount;
-    this.avatarUrl = avatarUrl;
+    this.avatarUrl = avatarUrl || undefined;
     this.username = username;
     this.passwordHash = passwordHash;
   }

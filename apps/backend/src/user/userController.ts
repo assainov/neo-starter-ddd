@@ -6,11 +6,12 @@ import { searchUsersQuery } from './searchUsers/searchUsersQuery';
 import registerUserResponseSchema, { RegisterUserResponse } from './registerUser/registerUserResponse';
 import { RegisterUserBody } from './registerUser/registerUserBody';
 import { BadRequestError, InternalServerError, NotFoundError } from '@neo/common-entities';
-import { IUser, User } from '@neo/domain/user';
+import { IEncryptionService, ITokenService, IUser, User } from '@neo/domain/user';
 import loginUserResponseSchema, { LoginUserResponse } from './loginUser/loginUserResponse';
 import { LoginUserBody } from './loginUser/loginUserBody';
 import userDtoSchema from './userDtos/userDtoSchema';
 import meResponseSchema, { MeResponse } from './me/meResponse';
+import { UserContainerRegistry } from './createUserRouter';
 
 export const users: IUser[] = [
   {
@@ -41,7 +42,15 @@ export const users: IUser[] = [
   }
 ];
 
-class UserController {
+export class UserController {
+  private _encryptionService: IEncryptionService;
+  private _tokenService: ITokenService;
+
+  public constructor({ encryptionService, tokenService }: UserContainerRegistry) {
+    this._encryptionService = encryptionService;
+    this._tokenService = tokenService;
+  }
+
   public getUsers: RequestHandler<never, SearchUsersResponse, never, searchUsersQuery> = (_req, res) => {
     res.status(200).send(users);
   };
@@ -57,10 +66,7 @@ class UserController {
   };
 
   public registerUser: RequestHandler<never, RegisterUserResponse, RegisterUserBody, never> = async (req, res) => {
-    const encryptionService = req.container?.resolve('encryptionService');
-    if (!encryptionService) throw new InternalServerError('Encryption service not found in container');
-
-    const newUser = await User.create(req.body, encryptionService);
+    const newUser = await User.create(req.body, this._encryptionService);
     const userObject = registerUserResponseSchema.parse(newUser);
 
     users.push(userObject);
@@ -68,11 +74,6 @@ class UserController {
   };
 
   public loginUser: RequestHandler<never, LoginUserResponse, LoginUserBody, never> = async (req, res) => {
-    const encryptionService = req.container?.resolve('encryptionService');
-    if (!encryptionService) throw new InternalServerError('Encryption service not found in container');
-    const tokenService = req.container?.resolve('tokenService');
-    if (!tokenService) throw new InternalServerError('Encryption service not found in container');
-
     const { email, password } = req.body;
 
     const userIndex = users.findIndex((user) => user.email === email);
@@ -81,7 +82,7 @@ class UserController {
 
     const properUser = new User(users[userIndex]);
 
-    const { error, accessToken } = await properUser.login(password, encryptionService, tokenService);
+    const { error, accessToken } = await properUser.login(password, this._encryptionService, this._tokenService);
 
     if (error) throw new BadRequestError(error);
 
@@ -91,11 +92,6 @@ class UserController {
   };
 
   public me: RequestHandler<never, MeResponse, never, never> = (req, res) => {
-    const encryptionService = req.container?.resolve('encryptionService');
-    if (!encryptionService) throw new InternalServerError('Encryption service not found in container');
-    const tokenService = req.container?.resolve('tokenService');
-    if (!tokenService) throw new InternalServerError('Encryption service not found in container');
-
     const email = req.tokenPayload?.email;
 
     if (!email) throw new InternalServerError('Email not found in token payload');
@@ -107,5 +103,3 @@ class UserController {
     res.status(200).send(meResponseSchema.parse(user));
   };
 }
-
-export const userController = new UserController();

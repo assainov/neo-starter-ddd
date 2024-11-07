@@ -2,7 +2,7 @@ import { asClass, asValue, createContainer, InjectionMode } from 'awilix';
 import { AppServer } from './__server/appServer';
 import { envConfig, EnvConfig } from './__server/envConfig';
 import { logger, Logger } from '@neo/tools/logger';
-import { IEncryptionService, ITokenService } from '@neo/domain/user';
+import { Database } from '@neo/persistence/prisma';
 
 export type Registry = {
   appServer: AppServer,
@@ -10,8 +10,7 @@ export type Registry = {
   envConfig: EnvConfig,
   logger: Logger,
   requestId?: string,
-  encryptionService: IEncryptionService,
-  tokenService: ITokenService
+  db: Database
 }
 
 const container = createContainer<Registry>({
@@ -24,6 +23,7 @@ container.register({
   container: asValue(container),
   envConfig: asValue(envConfig),
   logger: asValue(logger),
+  db: asClass(Database).singleton()
 });
 
 export type Container = typeof container;
