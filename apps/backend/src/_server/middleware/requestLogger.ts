@@ -5,7 +5,6 @@ import { StatusCodes, getReasonPhrase } from 'http-status-codes';
 import type { LevelWithSilent } from 'pino';
 import { type CustomAttributeKeys, type Options, pinoHttp } from 'pino-http';
 import { envConfig } from '@/_server/envConfig';
-import { _pinoLogger } from '@neo/tools/logger';
 
 enum LogLevel {
   Fatal = 'fatal',
@@ -26,7 +25,7 @@ type PinoCustomProps = {
 
 const requestLogger = (options?: Options): RequestHandler[] => {
   const pinoOptions: Options = {
-    logger: envConfig.isProduction ? undefined : _pinoLogger,
+    enabled: envConfig.isProduction,
     customProps: customProps as unknown as Options['customProps'],
     redact: [],
     genReqId,

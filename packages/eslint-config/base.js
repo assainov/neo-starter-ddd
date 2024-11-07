@@ -43,5 +43,6 @@ module.exports = {
     'array-bracket-spacing': [ 'error', 'always' ],
     '@typescript-eslint/explicit-member-accessibility': 'error',
     "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-argument": "off",
   }
 };
