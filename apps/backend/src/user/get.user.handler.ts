@@ -1,10 +1,9 @@
-import { commonValidations } from '@neo/express-tools/validation';
-import userDtoSchema from './_user.dto';
+import userDtoSchema from './common.dto';
 import z from 'zod';
-import { UserDI } from './_user.di';
+import { UserDI } from './setup/user.di';
 import { NotFoundError } from '@neo/common-entities';
 
-export const getUserParamsSchema = z.object({ id: commonValidations.id });
+export const getUserParamsSchema = z.object({ id: z.string().min(1) });
 export const getUserRequestSchema = z.object({ params: getUserParamsSchema });
 export const getUserResponseSchema = userDtoSchema.optional();
 

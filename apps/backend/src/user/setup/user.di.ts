@@ -3,7 +3,7 @@ import { IEncryptionService, ITokenService } from '@neo/domain/user';
 import { EncryptionService } from '@neo/security/encryptionService';
 import JwtTokenService from '@neo/security/jwtTokenService';
 import { Container, Registry } from '@/container';
-import createUserController, { UserController } from './_user.controller';
+import createUserController, { UserController } from './user.controller';
 
 export type UserDI = {
   userController: UserController,

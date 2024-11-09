@@ -1,8 +1,7 @@
-import { commonValidations } from '@neo/express-tools/validation';
 import { z } from 'zod';
 
 const userDtoSchema = z.object({
-  id: commonValidations.id,
+  id: z.string().min(1),
   firstName: z.string(),
   lastName: z.string(),
   email: z.string().email(),

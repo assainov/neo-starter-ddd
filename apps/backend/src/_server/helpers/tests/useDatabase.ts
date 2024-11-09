@@ -1,5 +1,5 @@
 import { beforeAll, beforeEach } from 'vitest';
-import { envConfig } from '../envConfig';
+import { envConfig } from '../../envConfig';
 import { PostgreSqlContainer } from '@testcontainers/postgresql';
 import { resetDatabase, runLatestMigrations, seedDatabase } from '@neo/persistence/prisma';
 

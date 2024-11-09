@@ -1,6 +1,6 @@
 import z from 'zod';
-import userDtoSchema from './_user.dto';
-import { UserDI } from './_user.di';
+import userDtoSchema from './common.dto';
+import { UserDI } from './setup/user.di';
 import { ValidationError } from '@neo/common-entities';
 import { User } from '@neo/domain/user';
 

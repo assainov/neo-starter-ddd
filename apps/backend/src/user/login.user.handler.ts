@@ -1,5 +1,5 @@
 import z from 'zod';
-import { UserDI } from './_user.di';
+import { UserDI } from './setup/user.di';
 import { BadRequestError } from '@neo/common-entities';
 
 export const loginUserBodySchema = z.object({

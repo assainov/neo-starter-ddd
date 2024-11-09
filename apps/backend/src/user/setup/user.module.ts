@@ -3,8 +3,8 @@ import express, { type Router } from 'express';
 
 import { z } from 'zod';
 import { Container } from '@/container';
-import { createUserContainer } from './_user.di';
-import { setupOpenAPIRegistry } from './_user.openapi';
+import { createUserContainer } from './user.di';
+import { setupOpenAPIRegistry } from './user.openapi';
 
 extendZodWithOpenApi(z);
 

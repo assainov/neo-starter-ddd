@@ -1,10 +1,10 @@
 import type { Request, Response, Router } from 'express';
-import { UserDI } from './_user.di';
-import { userDetailsHandler, userDetailsRequestSchema, UserDetailsResponse, } from './details.user.handler';
-import { searchUsersHandler, SearchUsersQuery, searchUsersRequestSchema, SearchUsersResponse, } from './search.user.handler';
-import { getUserHandler, GetUserParams, getUserRequestSchema, GetUserResponse, } from './get.user.handler';
-import { RegisterUserBody, registerUserHandler, registerUserRequestSchema, RegisterUserResponse, } from './register.user.handler';
-import { LoginUserBody, loginUserHandler, loginUserRequestSchema, LoginUserResponse, } from './login.user.handler';
+import { UserDI } from './user.di';
+import { userDetailsHandler, userDetailsRequestSchema, UserDetailsResponse, } from '../details.user.handler';
+import { searchUsersHandler, SearchUsersQuery, searchUsersRequestSchema, SearchUsersResponse, } from '../search.user.handler';
+import { getUserHandler, GetUserParams, getUserRequestSchema, GetUserResponse, } from '../get.user.handler';
+import { RegisterUserBody, registerUserHandler, registerUserRequestSchema, RegisterUserResponse, } from '../register.user.handler';
+import { LoginUserBody, loginUserHandler, loginUserRequestSchema, LoginUserResponse, } from '../login.user.handler';
 import { StatusCodes } from 'http-status-codes';
 import { authenticate } from '@/_server/middleware/authenticate';
 import { validate } from '@neo/express-tools/validation';
