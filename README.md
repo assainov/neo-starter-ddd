@@ -27,3 +27,19 @@ To develop all apps and packages, run the following command:
 ```
 npm run dev
 ```
+
+### Test
+
+To test all apps and packages:
+
+```
+npm run test
+```
+
+### Lint
+
+To check for linting issues all apps and packages:
+
+```
+npm run lint
+```
