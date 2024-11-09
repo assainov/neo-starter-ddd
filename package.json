@@ -1,5 +1,5 @@
 {
-  "name": "neo-starter",
+  "name": "neo-starter-ddd",
   "private": true,
   "scripts": {
     "build": "turbo build",
