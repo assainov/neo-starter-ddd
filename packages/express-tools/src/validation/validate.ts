@@ -2,7 +2,7 @@ import { ValidationError } from '@neo/common-entities';
 import { NextFunction, Request, Response } from 'express';
 import { ZodError, ZodSchema } from 'zod';
 
-export const validateRequest = (schema: ZodSchema) => (req: Request<unknown, unknown, unknown, unknown>, res: Response, next: NextFunction) => {
+export const validate = (schema: ZodSchema) => (req: Request<unknown, unknown, unknown, unknown>, res: Response, next: NextFunction) => {
   try {
     schema.parse({ body: req.body, query: req.query, params: req.params });
     next();

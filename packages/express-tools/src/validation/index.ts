@@ -1,2 +1,2 @@
 export { commonValidations } from './commonValidations';
-export { validateRequest } from './validateRequest';
+export { validate } from './validate';

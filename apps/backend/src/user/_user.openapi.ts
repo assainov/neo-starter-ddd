@@ -1,11 +1,11 @@
 import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
 
-import userDtoSchema from './_common.user';
-import { createApiRequestBody, createApiResponse } from '@/swagger/utils/openAPIResponseBuilders';
-import { searchUsersResponseSchema } from './search.user';
-import { getUserParamsSchema, getUserResponseSchema } from './get.user';
-import { loginUserBodySchema, loginUserResponseSchema } from './login.user';
-import { registerUserBodySchema, registerUserResponseSchema } from './register.user';
+import userDtoSchema from './_user.dto';
+import { searchUsersResponseSchema } from './search.user.handler';
+import { getUserParamsSchema, getUserResponseSchema } from './get.user.handler';
+import { loginUserBodySchema, loginUserResponseSchema } from './login.user.handler';
+import { registerUserBodySchema, registerUserResponseSchema } from './register.user.handler';
+import { createApiRequestBody, createApiResponse } from '@neo/express-tools/swagger';
 
 export const setupOpenAPIRegistry = () => {
   const userRegistry = new OpenAPIRegistry();

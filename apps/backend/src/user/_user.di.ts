@@ -1,20 +1,20 @@
-import { asClass } from 'awilix';
+import { asClass, asFunction } from 'awilix';
 import { IEncryptionService, ITokenService } from '@neo/domain/user';
 import { EncryptionService } from '@neo/security/encryptionService';
 import JwtTokenService from '@neo/security/jwtTokenService';
 import { Container, Registry } from '@/container';
-import { UserController } from './_controller.user';
+import createUserController, { UserController } from './_user.controller';
 
-export type UserContainerRegistry = {
+export type UserDI = {
   userController: UserController,
   encryptionService: IEncryptionService,
   tokenService: ITokenService
 } & Registry;
 
 export const createUserContainer = (container: Container) => {
-  const userContainer = container.createScope<UserContainerRegistry>();
+  const userContainer = container.createScope<UserDI>();
   userContainer.register({
-    userController: asClass(UserController).scoped(),
+    userController: asFunction(createUserController).scoped(),
     encryptionService: asClass(EncryptionService).scoped(),
     tokenService: asClass(JwtTokenService).scoped(),
   });

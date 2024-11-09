@@ -1,21 +1,21 @@
 import { describe, expect, it } from 'vitest';
-import { UserDto } from '../_common.user';
+import { UserDto } from '../_user.dto';
 
 import request from 'supertest';
 import { App } from 'supertest/types';
-import { SearchUsersResponse } from '../search.user';
+import { SearchUsersResponse } from '../search.user.handler';
 import { StatusCodes } from 'http-status-codes';
 import { ErrorResponse } from '@neo/common-entities';
-import { GetUserResponse } from '../get.user';
+import { GetUserResponse } from '../get.user.handler';
 import { seedData } from '@neo/persistence/prisma';
 import useServer from '@/_server/tests/useServer';
 import useDatabase from '@/_server/tests/useDatabase';
-import { RegisterUserResponse } from '../register.user';
-import { LoginUserResponse } from '../login.user';
+import { RegisterUserResponse } from '../register.user.handler';
+import { LoginUserResponse } from '../login.user.handler';
 import jwt from 'jsonwebtoken';
 import { envConfig } from '@/_server/envConfig';
 import { TokenPayload } from '@neo/domain/user';
-import { UserDetailsResponse } from '../details.user';
+import { UserDetailsResponse } from '../details.user.handler';
 import JwtTokenService from '@neo/security/jwtTokenService';
 
 describe('User API Endpoints', () => {

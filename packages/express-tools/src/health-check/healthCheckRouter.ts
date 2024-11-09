@@ -3,7 +3,7 @@ import express, { type Request, type Response, type Router } from 'express';
 import { z } from 'zod';
 
 import { StatusCodes } from 'http-status-codes';
-import { createApiResponse } from '@/swagger/utils/openAPIResponseBuilders';
+import { createApiResponse } from '../swagger';
 
 export const healthCheckRegistry = new OpenAPIRegistry();
 export const healthCheckRouter: Router = express.Router();
@@ -15,7 +15,7 @@ healthCheckRegistry.registerPath({
   responses: createApiResponse(z.null(), 'Success'),
 });
 
-healthCheckRouter.get('/', (_req: Request, res: Response) => {
+healthCheckRouter.get('/health', (_req: Request, res: Response) => {
   res.status(StatusCodes.OK).send({
     code: 'healthy',
     message: 'Service is healthy'

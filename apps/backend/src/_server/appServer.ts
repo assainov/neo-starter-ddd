@@ -6,13 +6,13 @@ import requestLogger from './middleware/requestLogger';
 import errorHandler from './middleware/errorHandler';
 import rateLimiter from './middleware/rateLimiter';
 import { Registry } from '../container';
-import { healthCheckRouter } from '../healthCheck/healthCheckRouter';
 import nocache from 'nocache';
 
 import 'express-async-errors';
-import { initializeUserModule } from '../user/_module.user';
-import { initializeOpenAPIModule } from '../swagger/_module.openAPI';
+import { initializeUserModule } from '../user/_user.module';
 import { BaseServer } from './helpers/baseServer';
+import { healthCheckRouter } from '@neo/express-tools/health-check';
+import { initializeOpenAPIModule } from '@neo/express-tools/swagger';
 
 export class AppServer extends BaseServer {
   public constructor(props: Registry) {

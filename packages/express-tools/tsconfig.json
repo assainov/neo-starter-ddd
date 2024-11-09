@@ -2,6 +2,7 @@
   "extends": "@neo/typescript-config/base.json",
   "include": [
     "**/*.ts",
+    "**/*.mts",
     "**/*.tsx",
     "./src/common/types/neo-env.d.ts", 
   ],
