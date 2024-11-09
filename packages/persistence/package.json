@@ -7,7 +7,6 @@
   },
   "scripts": {
     "clean": "rm -rf node_modules && rm -rf dist",
-    "dev": "prisma studio",
     "lint": "eslint . --max-warnings 0"
   },
   "devDependencies": {

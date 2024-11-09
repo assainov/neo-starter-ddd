@@ -13,6 +13,16 @@ class UserRepository implements IUserRepository {
     return dbUsers.map(u => new User(u));
   }
 
+  public async getById(id: string) {
+    const dbUser = await this._prisma.user.findUnique({
+      where: { id }
+    });
+
+    if (!dbUser) return null;
+
+    return new User(dbUser);
+  }
+
   public async getByEmail(email: string) {
     const dbUser = await this._prisma.user.findFirst({
       where: { email }

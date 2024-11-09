@@ -8,7 +8,7 @@
     "dev": "tsx watch --clear-screen=false src/_server/entry.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "vitest run"
+    "test": "DEBUG=testcontainers vitest run"
   },
   "engines": {
     "node": ">=18"
@@ -42,6 +42,7 @@
     "@eslint/js": "^8.57.1",
     "@neo/eslint-config": "*",
     "@neo/typescript-config": "*",
+    "@testcontainers/postgresql": "^10.14.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/supertest": "^6.0.2",

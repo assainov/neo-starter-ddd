@@ -9,6 +9,7 @@ export default defineConfig({
     globals: true,
     restoreMocks: true,
     setupFiles: [ 'dotenv/config' ], // Load .env file
+    hookTimeout: 30000, // For db container wait period
   },
   plugins: [ tsconfigPaths() ],
 });

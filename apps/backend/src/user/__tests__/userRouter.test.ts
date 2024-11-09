@@ -1,32 +1,24 @@
-import { StatusCodes } from 'http-status-codes';
-import request from 'supertest';
-
-import { beforeAll, describe, expect, it } from 'vitest';
-import { Application } from 'express';
-import container from '@/container';
-import { users } from '../_controller.user';
+import { describe, expect, it } from 'vitest';
 import { UserDto } from '../_common.user';
+
+import request from 'supertest';
 import { App } from 'supertest/types';
-import { ErrorResponse } from '@neo/common-entities';
 import { SearchUsersResponse } from '../search.user';
+import { StatusCodes } from 'http-status-codes';
+import { ErrorResponse } from '@neo/common-entities';
 import { GetUserResponse } from '../get.user';
+import { seedData } from '@neo/persistence/prisma';
+import useServer from '@/_server/tests/useServer';
+import useDatabase from '@/_server/tests/useDatabase';
 
 describe('User API Endpoints', () => {
-  let app: Application;
-
-  beforeAll(() => {
-    const appServer = container.resolve('appServer');
-    appServer.configure();
-    app = appServer.app;
-
-    // clean up function, called once after all tests run
-    return async () => {
-      await container.dispose();
-    };
-  });
+  useDatabase();
+  const getApp = useServer();
 
   describe('GET /users', () => {
     it('should return a list of users', async () => {
+      const app = getApp();
+
       // Act
       const response = await request(app as App).get('/users');
       const responseBody = response.body as SearchUsersResponse;
@@ -35,15 +27,49 @@ describe('User API Endpoints', () => {
       expect(response.statusCode).toEqual(StatusCodes.OK);
       expect(responseBody).toBeTruthy();
       expect(responseBody.length).toEqual(2);
-      responseBody.forEach((user, index) => { compareUsers(users[index] as UserDto, user); });
+      responseBody.forEach((user, index) => { compareUsers(seedData.users[index] as UserDto, user); });
     });
   });
 
   describe('GET /users/:id', () => {
     it('should return a user for a valid ID', async () => {
       // Arrange
+      const app = getApp();
       const testId = '1';
-      const expectedUser = users.find((user) => user.id === testId);
+      const expectedUser = seedData.users.find((user) => user.id === testId);
+
+      // Act
+      const response = await request(app as App).get(`/users/${testId}`);
+      const responseBody = response.body as GetUserResponse;
+
+      // Assert
+      expect(expectedUser).toBeDefined();
+      expect(response.statusCode).toEqual(StatusCodes.OK);
+      compareUsers(expectedUser, responseBody);
+    });
+
+    it('should return a not found error for non-existent ID', async () => {
+      // Arrange
+      const app = getApp();
+      const testId = Number.MAX_SAFE_INTEGER;
+
+      // Act
+      const response = await request(app as App).get(`/users/${testId.toString()}`);
+      const responseBody = response.body as ErrorResponse;
+
+      // Assert
+      expect(response.statusCode).toEqual(StatusCodes.NOT_FOUND);
+      expect(responseBody.code).toEqual('not_found');
+      expect(responseBody.message).toEqual('User not found');
+    });
+  });
+
+  describe('GET /users/register', () => {
+    it('should return a user for a valid ID', async () => {
+      // Arrange
+      const app = getApp();
+      const testId = '1';
+      const expectedUser = seedData.users.find((user) => user.id === testId);
 
       // Act
       const response = await request(app as App).get(`/users/${testId}`);
@@ -57,6 +83,7 @@ describe('User API Endpoints', () => {
 
     it('should return a not found error for non-existent ID', async () => {
       // Arrange
+      const app = getApp();
       const testId = Number.MAX_SAFE_INTEGER;
 
       // Act
@@ -76,11 +103,10 @@ function compareUsers(mockUser?: UserDto, responseUser?: UserDto) {
     throw new Error('Invalid test data: mockUser or responseUser is undefined');
   }
 
-  // expect(responseUser.id).toEqual(mockUser.id);
+  expect(responseUser.id).toEqual(mockUser.id);
   expect(responseUser.firstName).toEqual(mockUser.firstName);
   expect(responseUser.lastName).toEqual(mockUser.lastName);
   expect(responseUser.email).toEqual(mockUser.email);
   expect(responseUser.avatarUrl).toEqual(mockUser.avatarUrl);
-  expect(new Date(responseUser.createdAt)).toEqual(mockUser.createdAt);
-  expect(new Date(responseUser.updatedAt)).toEqual(mockUser.updatedAt);
+  expect(responseUser.username).toEqual(mockUser.username);
 }

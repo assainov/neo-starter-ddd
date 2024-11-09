@@ -1,25 +1,15 @@
-import container from '@/container';
-import { Application } from 'express';
+import useServer from '@/_server/tests/useServer';
 import { StatusCodes } from 'http-status-codes';
 import request from 'supertest';
 import { App } from 'supertest/types';
-import { beforeAll, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 describe('Health Check API endpoints', () => {
-  let app: Application;
-
-  beforeAll(() => {
-    const appServer = container.resolve('appServer');
-    appServer.configure();
-    app = appServer.app;
-
-    // clean up function, called once after all tests run
-    return async () => {
-      await container.dispose();
-    };
-  });
+  const getApp = useServer();
 
   it('GET / - success', async () => {
+    const app = getApp();
+
     const response = await request(app as App).get('/health');
     const result = response.body as { code: string; message: string };
 

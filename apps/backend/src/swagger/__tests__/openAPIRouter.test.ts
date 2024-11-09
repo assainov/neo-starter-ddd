@@ -1,29 +1,20 @@
 import { StatusCodes } from 'http-status-codes';
 import request from 'supertest';
 
-import { beforeAll, describe, expect, it } from 'vitest';
-import { Application } from 'express';
+import { describe, expect, it } from 'vitest';
 import container from '@/container';
 import { App } from 'supertest/types';
 import { initializeOpenAPIModule } from '../_module.openAPI';
 import { initializeUserModule } from '@/user/_module.user';
+import useServer from '@/_server/tests/useServer';
 
 describe('OpenAPI Router', () => {
   describe('Swagger JSON route', () => {
-    let app: Application;
-
-    beforeAll(() => {
-      const appServer = container.resolve('appServer');
-      appServer.configure();
-      app = appServer.app;
-
-      // clean up function, called once after all tests run
-      return async () => {
-        await container.dispose();
-      };
-    });
+    const getApp = useServer();
 
     it('should return Swagger JSON content', async () => {
+      // Arrange
+      const app = getApp();
       const { userRegistry } = initializeUserModule({ container });
 
       const module = initializeOpenAPIModule(userRegistry);
@@ -39,6 +30,9 @@ describe('OpenAPI Router', () => {
     });
 
     it('should serve the Swagger UI', async () => {
+      // Arrange
+      const app = getApp();
+
       // Act
       const response = await request(app as App).get('/');
 

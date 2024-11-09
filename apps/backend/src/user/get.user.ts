@@ -1,8 +1,8 @@
-import { validateRequest } from '@neo/tools/validation';
+import { commonValidations, validateRequest } from '@neo/tools/validation';
 import userDtoSchema from './_common.user';
 import z from 'zod';
 
-export const getUserParamsSchema = z.object({ email: z.string().email() });
+export const getUserParamsSchema = z.object({ id: commonValidations.id });
 
 export const getUserResponseSchema = userDtoSchema.optional();
 

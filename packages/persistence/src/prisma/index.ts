@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import UserRepository from './UserRepository';
 export { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+export * from './helpers';
+export * from './seed';
 
 export class Database {
   private prisma: PrismaClient;

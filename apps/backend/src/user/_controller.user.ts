@@ -18,9 +18,9 @@ export class UserController {
   };
 
   public get: RequestHandler<GetUserParams, GetUserResponse, never, never> = async (req, res) => {
-    const { email } = req.params;
+    const { id } = req.params;
 
-    const user = await this._registry.db.userRepository.getByEmail(email);
+    const user = await this._registry.db.userRepository.getById(id);
 
     if (!user) throw new NotFoundError('User not found');
 
