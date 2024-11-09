@@ -30,7 +30,7 @@ export class UserController {
   };
 
   public register: RequestHandler<never, RegisterUserResponse, RegisterUserBody, never> = async (req, res) => {
-    const newUser = await User.create(req.body, this._registry.encryptionService);
+    const newUser = await User.register(req.body, this._registry.encryptionService);
     try {
       const user = await this._registry.db.userRepository.create(newUser);
       res.status(StatusCodes.CREATED).send(registerUserResponseSchema.parse(user));

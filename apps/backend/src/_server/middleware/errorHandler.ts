@@ -53,7 +53,7 @@ const addErrorToRequestLog: ErrorRequestHandler = (err: Error, _req: Request, re
     error = new InternalServerError(err.message);
   }
 
-  const isTracingEnabled = !envConfig.isProduction || isServerError(error) && !isTestEnvironment();
+  const isTracingEnabled = !envConfig.isProduction && envConfig.NODE_ENV !== 'test' || isServerError(error) && !isTestEnvironment();
 
   if (isTracingEnabled) { logger.error(error); }
   const trace = isTracingEnabled ? error.stack : undefined;

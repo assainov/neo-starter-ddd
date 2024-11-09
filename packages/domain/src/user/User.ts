@@ -1,65 +1,64 @@
-import { IEncryptionService } from './IEncryptionService';
-import { ITokenService } from './ITokenService';
-import { UserProps } from './UserProps';
-import { LoginResult } from './valueObjects/LoginResult';
-import { NewUserDraft } from './valueObjects/NewUserDraft';
+import { SerializedUser } from './value-objects/SerializedUser';
+import { LoginResult } from './value-objects/LoginResult';
+import { IEncryptionService, ITokenService } from './interfaces';
+import { RegisterParams } from './value-objects';
 
 export class User {
-  #private: UserProps;
+  #props: SerializedUser;
 
-  public get id(): string | undefined { return this.#private.id; }
-  private set id(value: string | undefined) { this.#private.id = value; }
+  public get id(): string | undefined { return this.#props.id; }
+  private set id(value: string | undefined) { this.#props.id = value; }
 
-  public get firstName(): string { return this.#private.firstName; }
-  private set firstName(value: string) { this.#private.firstName = value; }
+  public get firstName(): string { return this.#props.firstName; }
+  private set firstName(value: string) { this.#props.firstName = value; }
 
-  public get lastName(): string { return this.#private.lastName; }
-  private set lastName(value: string) { this.#private.lastName = value; }
+  public get lastName(): string { return this.#props.lastName; }
+  private set lastName(value: string) { this.#props.lastName = value; }
 
-  public get email(): string { return this.#private.email; }
-  private set email(value: string) { this.#private.email = value; }
+  public get email(): string { return this.#props.email; }
+  private set email(value: string) { this.#props.email = value; }
 
-  public get createdAt(): Date { return this.#private.createdAt; }
-  private set createdAt(value: Date) { this.#private.createdAt = value; }
+  public get createdAt(): Date { return this.#props.createdAt; }
+  private set createdAt(value: Date) { this.#props.createdAt = value; }
 
-  public get updatedAt(): Date { return this.#private.updatedAt; }
-  private set updatedAt(value: Date) { this.#private.updatedAt = value; }
+  public get updatedAt(): Date { return this.#props.updatedAt; }
+  private set updatedAt(value: Date) { this.#props.updatedAt = value; }
 
-  public get registeredAt(): Date { return this.#private.registeredAt; }
-  private set registeredAt(value: Date) { this.#private.registeredAt = value; }
+  public get registeredAt(): Date { return this.#props.registeredAt; }
+  private set registeredAt(value: Date) { this.#props.registeredAt = value; }
 
-  public get lastLoginAt(): Date { return this.#private.lastLoginAt; }
-  private set lastLoginAt(value: Date) { this.#private.lastLoginAt = value; }
+  public get lastLoginAt(): Date { return this.#props.lastLoginAt; }
+  private set lastLoginAt(value: Date) { this.#props.lastLoginAt = value; }
 
-  public get loginsCount(): number { return this.#private.loginsCount; }
-  private set loginsCount(value: number) { this.#private.loginsCount = value; }
+  public get loginsCount(): number { return this.#props.loginsCount; }
+  private set loginsCount(value: number) { this.#props.loginsCount = value; }
 
-  public get avatarUrl(): string | undefined | null { return this.#private.avatarUrl; }
-  private set avatarUrl(value: string | undefined) { this.#private.avatarUrl = value; }
+  public get avatarUrl(): string | undefined | null { return this.#props.avatarUrl; }
+  private set avatarUrl(value: string | undefined) { this.#props.avatarUrl = value; }
 
-  public get username(): string { return this.#private.username; }
-  private set username(value: string) { this.#private.username = value; }
+  public get username(): string { return this.#props.username; }
+  private set username(value: string) { this.#props.username = value; }
 
-  public get passwordHash(): string { return this.#private.passwordHash; }
-  private set passwordHash(value: string) { this.#private.passwordHash = value; }
+  public get passwordHash(): string { return this.#props.passwordHash; }
+  private set passwordHash(value: string) { this.#props.passwordHash = value; }
 
   public toJSON() {
-    return this.#private;
+    return this.#props;
   }
 
-  public static toClass(props: UserProps) {
-    return new User(props);
+  public static toClass(user: SerializedUser) {
+    return new User(user);
   }
 
-  public constructor(props: UserProps) {
-    this.#private = props;
+  public constructor(props: SerializedUser) {
+    this.#props = props;
   }
 
-  public static async create(
-    newUserDraft: NewUserDraft,
+  public static async register(
+    params: RegisterParams,
     encryptionService: IEncryptionService
   ) {
-    const { firstName, lastName, email, password, avatarUrl, username: usernameOrNull } = newUserDraft;
+    const { firstName, lastName, email, password, avatarUrl, username: usernameOrNull } = params;
 
     if (!firstName || !lastName || !email || !password) {
       throw new Error('domain/user/validation: Missing required fields');
