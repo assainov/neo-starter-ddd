@@ -1,7 +1,12 @@
+import path from 'node:path';
 import dotenv from 'dotenv';
 import { z } from 'zod';
 
-dotenv.config();
+const fileName = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env';
+
+dotenv.config({
+  path: path.resolve(__dirname, `../../${fileName}`)
+});
 
 const validationSchema = z.object({
   HOST: z.string().min(5).default('localhost'),

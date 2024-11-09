@@ -34,7 +34,7 @@ const bob = {
   lastLoginAt: new Date(),
   loginsCount: 1,
   avatarUrl: null,
-  passwordHash: 'hashedpassword2',
+  passwordHash: '$2a$10$4yIqOp0OE85eVwjV99OMLO0HcqgRq7lwn9whrKjZ9wP9BQk1YUgZ.',
 };
 
 export const seedData = {

@@ -1,5 +1,5 @@
 import type { RequestHandler } from 'express';
-import { BadRequestError, InternalServerError, NotFoundError } from '@neo/common-entities';
+import { BadRequestError, InternalServerError, NotFoundError, ValidationError } from '@neo/common-entities';
 import { User } from '@neo/domain/user';
 import { UserContainerRegistry } from './_container.user';
 import { UserDetailsResponse, userDetailsResponseSchema } from './details.user';
@@ -7,6 +7,8 @@ import { SearchUsersQuery, SearchUsersResponse, searchUsersResponseSchema } from
 import { GetUserParams, GetUserResponse, getUserResponseSchema } from './get.user';
 import { RegisterUserBody, RegisterUserResponse, registerUserResponseSchema } from './register.user';
 import { LoginUserBody, LoginUserResponse, loginUserResponseSchema } from './login.user';
+import { StatusCodes } from 'http-status-codes';
+import { PrismaClientKnownRequestError } from '@neo/persistence/prisma';
 
 export class UserController {
   public constructor(private _registry: UserContainerRegistry) {}
@@ -29,9 +31,16 @@ export class UserController {
 
   public register: RequestHandler<never, RegisterUserResponse, RegisterUserBody, never> = async (req, res) => {
     const newUser = await User.create(req.body, this._registry.encryptionService);
-    const user = await this._registry.db.userRepository.create(newUser);
+    try {
+      const user = await this._registry.db.userRepository.create(newUser);
+      res.status(StatusCodes.CREATED).send(registerUserResponseSchema.parse(user));
+    } catch (error: unknown) {
+      if (error instanceof PrismaClientKnownRequestError && error.code === 'P2002') {
+        throw new ValidationError(`User with email ${newUser.email} already exists`);
+      }
+      throw error;
+    }
 
-    res.status(200).send(registerUserResponseSchema.parse(user));
   };
 
   public login: RequestHandler<never, LoginUserResponse, LoginUserBody, never> = async (req, res) => {
@@ -39,7 +48,7 @@ export class UserController {
 
     const user = await this._registry.db.userRepository.getByEmail(email);
 
-    if (!user) throw new NotFoundError('Invalid email or password');
+    if (!user) throw new BadRequestError('Invalid email or password');
 
     const { error, accessToken } = await user.login(password, this._registry.encryptionService, this._registry.tokenService);
 

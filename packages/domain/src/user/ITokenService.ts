@@ -3,6 +3,7 @@ export interface ITokenService {
 }
 
 export type TokenPayload = {
+  id: string;
   email: string;
   lastLoginAt: Date;
 };

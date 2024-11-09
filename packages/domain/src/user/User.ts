@@ -124,7 +124,12 @@ export class User {
   }
 
   private generateAccessToken(tokenService: ITokenService): string {
+    if (!this.id) {
+      throw new Error('domain/user: User ID is required to generate access token');
+    }
+
     const payload = {
+      id: this.id,
       email: this.email,
       lastLoginAt: this.lastLoginAt,
     };

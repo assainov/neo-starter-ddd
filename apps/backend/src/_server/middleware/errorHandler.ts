@@ -5,6 +5,7 @@ import { StatusCodes } from 'http-status-codes';
 import { envConfig } from '../envConfig';
 import { PrismaClientKnownRequestError } from '@neo/persistence/prisma';
 import { ZodError } from 'zod';
+import { InvalidTokenError, UnauthorizedError as JwtUnauthorized } from 'express-oauth2-jwt-bearer';
 
 const unknownRoute: RequestHandler<unknown, unknown, unknown, unknown> = (_req, res) => {
   res.sendStatus(StatusCodes.NOT_FOUND);
@@ -39,12 +40,15 @@ const addErrorToRequestLog: ErrorRequestHandler = (err: Error, _req: Request, re
   const isKnownError = err instanceof _BaseError;
   const isPrismaError = err instanceof PrismaClientKnownRequestError;
   const isZodError = err instanceof ZodError;
+  const isAuthError = err instanceof JwtUnauthorized || err instanceof InvalidTokenError;
 
   let error = err as _BaseError;
   if (isPrismaError) {
     error = getPrismaError(err);
   } else if (isZodError) {
     error = getZodError(err);
+  } else if (isAuthError) {
+    error = { ...err, code: 'unauthorized' };
   } else if (!isKnownError) {
     error = new InternalServerError(err.message);
   }
