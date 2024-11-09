@@ -1,4 +1,4 @@
-import { commonValidations, validateRequest } from '@neo/tools/validation';
+import { commonValidations, validateRequest } from '@neo/express-tools/validation';
 import userDtoSchema from './_common.user';
 import z from 'zod';
 

@@ -3,7 +3,7 @@ import { Server } from 'http';
 import { Container, Registry } from '../../container';
 
 import 'express-async-errors';
-import { Logger } from '@neo/tools/logger';
+import { Logger } from '@neo/express-tools/logger';
 import { EnvConfig } from '../envConfig';
 import { Database } from '@neo/persistence/prisma';
 

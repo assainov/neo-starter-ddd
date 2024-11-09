@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { InvalidTokenError, UnauthorizedError } from 'express-oauth2-jwt-bearer';
 import { RequestHandler } from 'express';
-import { logger } from '@neo/tools/logger';
+import { logger } from '@neo/express-tools/logger';
 import { TokenPayload } from '@neo/domain/user';
 import { envConfig } from '../envConfig';
 

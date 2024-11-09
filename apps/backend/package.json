@@ -23,7 +23,7 @@
     "@neo/domain": "*",
     "@neo/persistence": "*",
     "@neo/security": "*",
-    "@neo/tools": "*",
+    "@neo/express-tools": "*",
     "awilix": "^12.0.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

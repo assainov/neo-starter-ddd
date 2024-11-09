@@ -1,7 +1,7 @@
 import { asClass, asValue, createContainer, InjectionMode } from 'awilix';
 import { AppServer } from './_server/appServer';
 import { envConfig, EnvConfig } from './_server/envConfig';
-import { logger, Logger } from '@neo/tools/logger';
+import { logger, Logger } from '@neo/express-tools/logger';
 import { Database } from '@neo/persistence/prisma';
 
 export type Registry = {

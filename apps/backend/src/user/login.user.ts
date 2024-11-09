@@ -1,4 +1,4 @@
-import { validateRequest } from '@neo/tools/validation';
+import { validateRequest } from '@neo/express-tools/validation';
 import z from 'zod';
 
 export const loginUserBodySchema = z.object({

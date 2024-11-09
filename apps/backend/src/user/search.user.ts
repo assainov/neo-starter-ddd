@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { validateRequest } from '@neo/tools/validation';
+import { validateRequest } from '@neo/express-tools/validation';
 import userDtoSchema from './_common.user';
 
 export const searchUsersQuerySchema = z.object({});

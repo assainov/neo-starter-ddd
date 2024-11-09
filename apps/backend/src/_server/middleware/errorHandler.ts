@@ -1,5 +1,5 @@
 import { _BaseError, ErrorResponse, InternalServerError, ValidationError } from '@neo/common-entities';
-import { logger } from '@neo/tools/logger';
+import { logger } from '@neo/express-tools/logger';
 import type { ErrorRequestHandler, NextFunction, Request, RequestHandler, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { envConfig } from '../envConfig';
