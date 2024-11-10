@@ -3,15 +3,16 @@ import express, { type Router } from 'express';
 
 import { z } from 'zod';
 import { Container } from '@/container';
-import { createUserContainer } from './user.di';
 import { setupOpenAPIRegistry } from './user.openapi';
+import { createUserContainer } from './user.di';
+import createUserController from './user.controller';
 
 extendZodWithOpenApi(z);
 
 export const initializeUserModule = ({ container }: { container: Container }) => {
   const userRouter: Router = express.Router();
-  const userContainer = createUserContainer(container);
-  const userController = userContainer.resolve('userController');
+  const { cradle: di } = createUserContainer(container);
+  const userController = createUserController(di);
   const userRegistry = setupOpenAPIRegistry();
 
   userController(userRouter);

@@ -1,17 +1,16 @@
 import { asClass, asValue, createContainer, InjectionMode } from 'awilix';
 import { AppServer } from './_server/appServer';
 import { envConfig, EnvConfig } from './_server/envConfig';
-import { logger, Logger } from '@neo/express-tools/logger';
+import { logger } from '@neo/express-tools/logger';
 import { Database } from '@neo/persistence/prisma';
+import { IAppRegistry } from '@neo/application/interfaces';
 
 export type Registry = {
   appServer: AppServer,
   container: Container,
-  envConfig: EnvConfig,
-  logger: Logger,
   requestId?: string,
-  db: Database
-}
+  envConfig: EnvConfig,
+} & IAppRegistry; // injected to the Application layer
 
 const container = createContainer<Registry>({
   injectionMode: InjectionMode.PROXY,

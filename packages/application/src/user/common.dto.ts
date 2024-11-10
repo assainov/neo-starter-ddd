@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const userDtoSchema = z.object({
+export const userDtoSchema = z.object({
   id: z.string().min(1),
   firstName: z.string(),
   lastName: z.string(),
@@ -11,4 +11,3 @@ const userDtoSchema = z.object({
 });
 
 export type UserDto = z.infer<typeof userDtoSchema>;
-export default userDtoSchema;

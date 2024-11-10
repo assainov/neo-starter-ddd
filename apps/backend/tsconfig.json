@@ -13,7 +13,7 @@
     "**/*.mts",
     "**/*.tsx",
     "src/_server/neoEnv.d.ts"
-  ],
+, "../../packages/application/src/user/common.dto.ts", "../../packages/application/src/user/details.user.handler.ts", "../../packages/application/src/user/get.user.handler.ts", "../../packages/application/src/user/login.user.handler.ts", "../../packages/application/src/user/register.user.handler.ts", "../../packages/application/src/user/search.user.handler.ts", "src/user/user.di.ts"  ],
   "exclude": ["./node_modules", "./dist"]
   }
 

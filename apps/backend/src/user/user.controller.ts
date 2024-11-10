@@ -1,15 +1,31 @@
 import type { Request, Response, Router } from 'express';
-import { UserDI } from './user.di';
-import { userDetailsHandler, userDetailsRequestSchema, UserDetailsResponse, } from '../details.user.handler';
-import { searchUsersHandler, SearchUsersQuery, searchUsersRequestSchema, SearchUsersResponse, } from '../search.user.handler';
-import { getUserHandler, GetUserParams, getUserRequestSchema, GetUserResponse, } from '../get.user.handler';
-import { RegisterUserBody, registerUserHandler, registerUserRequestSchema, RegisterUserResponse, } from '../register.user.handler';
-import { LoginUserBody, loginUserHandler, loginUserRequestSchema, LoginUserResponse, } from '../login.user.handler';
+import {
+  userDetailsHandler,
+  userDetailsRequestSchema,
+  UserDetailsResponse,
+  searchUsersHandler,
+  SearchUsersQuery,
+  searchUsersRequestSchema,
+  SearchUsersResponse,
+  getUserHandler,
+  GetUserParams,
+  getUserRequestSchema,
+  GetUserResponse,
+  RegisterUserBody,
+  registerUserHandler,
+  registerUserRequestSchema,
+  RegisterUserResponse,
+  LoginUserBody,
+  loginUserHandler,
+  loginUserRequestSchema,
+  LoginUserResponse,
+  IUserDI,
+} from '@neo/application/user';
 import { StatusCodes } from 'http-status-codes';
 import { authenticate } from '@/_server/middleware/authenticate';
 import { validate } from '@neo/express-tools/validation';
 
-const createUserController = (di: UserDI) => (userRouter: Router) => {
+const createUserController = (di: IUserDI) => (userRouter: Router) => {
   userRouter.get('/', validate(searchUsersRequestSchema), async(_req: Request<never, SearchUsersResponse, never, SearchUsersQuery>, res: Response<SearchUsersResponse>) => {
     const result = await searchUsersHandler({ di });
 

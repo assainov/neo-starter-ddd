@@ -19,6 +19,7 @@
   "license": "ISC",
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.2.0",
+    "@neo/application": "*",
     "@neo/common-entities": "*",
     "@neo/domain": "*",
     "@neo/persistence": "*",

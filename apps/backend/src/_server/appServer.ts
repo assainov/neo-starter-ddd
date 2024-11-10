@@ -12,7 +12,7 @@ import 'express-async-errors';
 import { BaseServer } from './helpers/baseServer';
 import { healthCheckRouter } from '@neo/express-tools/health-check';
 import { initializeOpenAPIModule } from '@neo/express-tools/swagger';
-import { initializeUserModule } from '@/user/setup/user.module';
+import { initializeUserModule } from '@/user/user.module';
 
 export class AppServer extends BaseServer {
   public constructor(props: Registry) {

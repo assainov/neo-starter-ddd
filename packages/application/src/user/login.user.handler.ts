@@ -1,6 +1,6 @@
 import z from 'zod';
-import { UserDI } from './setup/user.di';
 import { BadRequestError } from '@neo/common-entities';
+import { IUserDI } from './interfaces/IUserDI';
 
 export const loginUserBodySchema = z.object({
   email: z.string().email(),
@@ -14,7 +14,7 @@ export const loginUserResponseSchema = z.object({
 export type LoginUserBody = z.infer<typeof loginUserBodySchema>;
 export type LoginUserResponse = z.infer<typeof loginUserResponseSchema>;
 
-export const loginUserHandler = async ({ di, loginDto }: { loginDto: LoginUserBody; di: UserDI; }) => {
+export const loginUserHandler = async ({ di, loginDto }: { loginDto: LoginUserBody; di: IUserDI; }) => {
   const { email, password } = loginDto;
 
   const user = await di.db.userRepository.getByEmail(email);
