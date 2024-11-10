@@ -1,5 +1,5 @@
 {
   "extends": "@neo/typescript-config/base.json",
-  "include": [".", "../../apps/backend/src/user/user.di.ts"],
+  "include": ["."],
   "exclude": ["./node_modules", "**/*/node_modules", "./dist"]
   }

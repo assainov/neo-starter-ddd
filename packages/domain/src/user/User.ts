@@ -24,9 +24,6 @@ export class User {
   public get updatedAt(): Date { return this.#props.updatedAt; }
   private set updatedAt(value: Date) { this.#props.updatedAt = value; }
 
-  public get registeredAt(): Date { return this.#props.registeredAt; }
-  private set registeredAt(value: Date) { this.#props.registeredAt = value; }
-
   public get lastLoginAt(): Date { return this.#props.lastLoginAt; }
   private set lastLoginAt(value: Date) { this.#props.lastLoginAt = value; }
 
@@ -84,7 +81,6 @@ export class User {
       email,
       createdAt,
       updatedAt,
-      registeredAt,
       lastLoginAt,
       loginsCount,
       username,
@@ -96,7 +92,7 @@ export class User {
   public async login(password: string, encryptionService: IEncryptionService, tokenService: ITokenService): Promise<LoginResult> {
     const isPasswordValid = await encryptionService.comparePassword(password, this.passwordHash);
     if (!isPasswordValid) {
-      return { error: 'Invalid password' };
+      return { error: 'Invalid email or password' };
     }
 
     this.lastLoginAt = new Date();
