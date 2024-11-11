@@ -26,7 +26,7 @@ const validationSchema = z.object({
 
   DATABASE_URL: z.string().url(),
 
-  MIN_LOG_LEVEL: z
+  LOG_LEVEL: z
     .union([
       z.literal('trace'),
       z.literal('debug'),

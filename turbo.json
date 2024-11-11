@@ -1,6 +1,10 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
+  "globalEnv": [
+    "NODE_ENV",
+    "LOG_LEVEL"
+  ],
   "tasks": {
     "build": {
       "dependsOn": [
@@ -28,6 +32,9 @@
     "test": {
       "dependsOn": [
         "^test"
+      ],
+      "env": [
+        "VITEST"
       ]
     },
     "lint:fix": {

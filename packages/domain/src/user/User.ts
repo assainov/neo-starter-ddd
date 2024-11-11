@@ -69,7 +69,6 @@ export class User {
 
     const createdAt = new Date();
     const updatedAt = new Date();
-    const registeredAt = new Date();
     const lastLoginAt = new Date();
     const loginsCount = 0;
 

@@ -9,8 +9,5 @@
   "editor.guides.bracketPairs": "active",
   "editor.tabSize": 2,
   "editor.detectIndentation": false,
-  "javascript.preferences.importModuleSpecifierEnding": "js",
-  "files.associations": {
-    "*.css": "tailwindcss"
-  }
+  "javascript.preferences.importModuleSpecifierEnding": "js"
 }

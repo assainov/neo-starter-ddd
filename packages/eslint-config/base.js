@@ -2,12 +2,22 @@ const { resolve } = require('node:path');
  
 const project = resolve(process.cwd(), 'tsconfig.json');
 
+/** @type {import("eslint").Linter.Config} */
 module.exports = {
   extends: [
     'eslint:recommended',
-    'plugin:@typescript-eslint/strict-type-checked',
+    "plugin:@typescript-eslint/recommended",
+    "plugin:eslint-comments/recommended",
+    "plugin:vitest/recommended",
+    "turbo",
   ],
-  plugins: [ '@typescript-eslint', 'import', 'unused-imports' ],
+  plugins: [ 
+    '@typescript-eslint', 
+    'vitest',
+    'import',
+     'unused-imports',
+     "no-secrets", 
+    ],
   ignorePatterns: [
     '**/dist/**/*.js',
     '**/node_modules/**/*.js',

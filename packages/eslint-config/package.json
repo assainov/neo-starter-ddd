@@ -3,17 +3,35 @@
   "version": "0.0.0",
   "private": true,
   "files": [
-    "base.js"
+    "base.js",
+    "next.js"
   ],
   "scripts": {
     "clean": "rm -rf node_modules && rm -rf dist"
   },
   "devDependencies": {
+    "@next/eslint-plugin-next": "^15.0.3",
     "@typescript-eslint/eslint-plugin": "^8.12.2",
     "@typescript-eslint/parser": "^8.12.2",
+    "@vercel/style-guide": "^6.0.0",
     "eslint": "^8.57.1",
+    "eslint-config-next": "^15.0.3",
+    "eslint-config-turbo": "^2.2.3",
+    "eslint-plugin-css": "^0.11.0",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-i18next": "^6.1.0",
     "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-next": "^0.0.0",
+    "eslint-plugin-no-secrets": "^1.1.2",
+    "eslint-plugin-only-warn": "^1.1.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-redux": "^4.2.0",
+    "eslint-plugin-react-refresh": "^0.4.14",
+    "eslint-plugin-tailwindcss": "^3.17.5",
     "eslint-plugin-unused-imports": "^4.1.4",
+    "eslint-plugin-vitest": "^0.5.4",
+    "eslint-plugin-write-good-comments": "^0.2.0",
     "typescript": "5.6.3"
   }
 }

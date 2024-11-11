@@ -13,7 +13,7 @@ const prettifyDevLogs = (isProduction ? {} : {
 });
 
 const pinoLogger = pino({
-  level: process.env.MIN_LOG_LEVEL,
+  level: process.env.LOG_LEVEL,
   ...prettifyDevLogs
 });
 
