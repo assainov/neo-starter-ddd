@@ -8,6 +8,7 @@
     "dev": "tsx watch --clear-screen=false src/_server/entry.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "start": "NODE_ENV=production node dist/_server/entry.js",
     "test": "vitest run",
     "test:watch": "vitest run --watch"
   },
@@ -37,6 +38,7 @@
     "nocache": "^4.0.0",
     "pino": "^9.5.0",
     "pino-http": "^10.3.0",
+    "response-time": "^2.3.3",
     "swagger-ui-express": "^5.0.1",
     "zod": "^3.23.8"
   },
@@ -47,6 +49,7 @@
     "@testcontainers/postgresql": "^10.14.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/response-time": "^2.3.8",
     "@types/supertest": "^6.0.2",
     "@types/swagger-ui-express": "^4.1.7",
     "@typescript-eslint/eslint-plugin": "^8.12.2",

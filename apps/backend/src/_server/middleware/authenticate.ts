@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
-import { InvalidTokenError, UnauthorizedError } from 'express-oauth2-jwt-bearer';
 import { RequestHandler } from 'express';
 import { logger } from '@neo/express-tools/logger';
 import { TokenPayload } from '@neo/domain/user';
 import { envConfig } from '../envConfig';
+import { UnauthorizedError } from '@neo/common-entities';
 
 /**
  * Middleware to authenticate a user based on the Authorization header.
@@ -19,20 +19,20 @@ export const authenticate: RequestHandler<unknown, unknown, unknown, unknown> = 
   }
 
   if (!header.startsWith('Bearer ')) {
-    throw new InvalidTokenError('Invalid authorization header');
+    throw new UnauthorizedError('Invalid authorization header');
   }
 
   try {
     const token = header.slice(7);
     const payload = jwt.verify(token, envConfig.JWT_SECRET);
 
-    if (!payload) throw new InvalidTokenError('Invalid token');
+    if (!payload) throw new UnauthorizedError('Invalid token');
 
     req.tokenPayload = payload as TokenPayload;
     next();
   } catch (error) {
     logger.error(error);
 
-    throw new InvalidTokenError('Bad credentials');
+    throw new UnauthorizedError('Bad credentials');
   }
 };

@@ -6,6 +6,11 @@
     "LOG_LEVEL"
   ],
   "tasks": {
+    "start": {
+      "dependsOn": [
+        "^start"
+      ]
+    },
     "build": {
       "dependsOn": [
         "^build"

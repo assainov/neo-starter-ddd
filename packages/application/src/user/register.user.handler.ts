@@ -1,6 +1,5 @@
 import z from 'zod';
 import { userDtoSchema } from './common.dto';
-import { ValidationError } from '@neo/common-entities';
 import { User } from '@neo/domain/user';
 import { IUserDI } from './interfaces/IUserDI';
 
@@ -19,10 +18,6 @@ export type RegisterUserResponse = z.infer<typeof registerUserResponseSchema>;
 export type RegisterUserBody = z.infer<typeof registerUserBodySchema>;
 
 export const registerUserHandler = async ({ di, newUserDto }: { newUserDto: RegisterUserBody; di: IUserDI; }) => {
-  const { email } = newUserDto;
-  const existing = await di.db.userRepository.getByEmail(email);
-  if (existing) throw new ValidationError(`User with email ${email} already exists`);
-
   const newUser = await User.register(newUserDto, di.encryptionService);
   const user = await di.db.userRepository.create(newUser);
 

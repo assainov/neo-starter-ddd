@@ -1,5 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 import { IUserRepository, User } from '@neo/domain/user';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { PrismaError } from 'prisma-error-enum';
+import { InternalDatabaseError } from '@neo/common-entities';
+
+const isKnownError = (error: unknown) => (error instanceof PrismaClientKnownRequestError);
 
 class UserRepository implements IUserRepository {
   private _prisma: PrismaClient;
@@ -34,11 +39,28 @@ class UserRepository implements IUserRepository {
   }
 
   public async create(user: User) {
-    const dbUser = await this._prisma.user.create({
-      data: user.toJSON()
-    });
+    try {
+      const dbUser = await this._prisma.user.create({
+        data: user.toJSON()
+      });
 
-    return new User(dbUser);
+      return new User(dbUser);
+    } catch (e: unknown) {
+      if (!isKnownError(e)) throw e;
+
+      const error = e as PrismaClientKnownRequestError;
+
+      if (
+        error.code === PrismaError.UniqueConstraintViolation &&
+        (error.meta?.target as string[])[0] === 'email'
+      ) {
+        throw new InternalDatabaseError(
+          `User with email ${user.email} already exists`,
+        );
+      }
+
+      throw e;
+    }
   }
 
   public async update(user: User) {

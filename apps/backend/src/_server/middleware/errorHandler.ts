@@ -1,68 +1,70 @@
-import { _BaseError, ErrorResponse, InternalServerError, ValidationError } from '@neo/common-entities';
+import {
+  ApplicationError,
+  InternalDatabaseError,
+  UnauthorizedError,
+  ErrorResponse,
+  InternalServerError, ValidationError,
+  BadRequestError,
+  NotFoundError } from '@neo/common-entities';
 import { logger } from '@neo/express-tools/logger';
-import type { ErrorRequestHandler, NextFunction, Request, RequestHandler, Response } from 'express';
+import { type ErrorRequestHandler, type NextFunction, type Request, type RequestHandler, type Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { envConfig } from '../envConfig';
-import { PrismaClientKnownRequestError } from '@neo/persistence/prisma';
-import { ZodError } from 'zod';
-import { InvalidTokenError, UnauthorizedError as JwtUnauthorized } from 'express-oauth2-jwt-bearer';
 
 const unknownRoute: RequestHandler<unknown, unknown, unknown, unknown> = (_req, res) => {
   res.sendStatus(StatusCodes.NOT_FOUND);
 };
 
-const isServerError = (err: Error) => err instanceof InternalServerError || (err instanceof Error && !(err instanceof _BaseError));
-const isTestEnvironment = () => process.env.VITEST === 'true';
+const isKnownServerError = (err: ApplicationError) => err instanceof InternalServerError;
+const isUnknownServerError = (err: ApplicationError) => err instanceof Error && !(err instanceof ApplicationError);
 
-const getPrismaError = (err: PrismaClientKnownRequestError) => {
-  switch (err.code) {
-  case 'P2002':
-    // handling duplicate key errors
-    return new ValidationError(`Duplicate field value: ${err.meta?.target as string}`);
-  case 'P2014':
-    // handling invalid id errors
-    return new ValidationError(`Invalid ID: ${err.meta?.target as string}`);
-  case 'P2003':
-    // handling invalid data errors
-    return new InternalServerError(`Invalid input data: ${err.meta?.target as string}`);
-  default:
-    // handling all other errors
-    return new InternalServerError(`Something went wrong: ${err.message}`);
-  }
-};
+const isTestEnvironment = () => process.env.VITEST === 'true' || envConfig.NODE_ENV === 'test';
 
-const getZodError = (err: ZodError) => {
-  const errorMessage = (err).errors.map((e) => `'${e.path.join(' ')}': ${e.message}`).join(', ');
-  return new ValidationError(errorMessage);
-};
+const addErrorToRequestLog: ErrorRequestHandler = (err: ApplicationError, _req: Request, res: Response, _next: NextFunction) => {
 
-const addErrorToRequestLog: ErrorRequestHandler = (err: Error, _req: Request, res: Response, _next: NextFunction) => {
-  const isKnownError = err instanceof _BaseError;
-  const isPrismaError = err instanceof PrismaClientKnownRequestError;
-  const isZodError = err instanceof ZodError;
-  const isAuthError = err instanceof JwtUnauthorized || err instanceof InvalidTokenError;
+  const response = getErrorResponse(err);
 
-  let error = err as _BaseError;
-  if (isPrismaError) {
-    error = getPrismaError(err);
-  } else if (isZodError) {
-    error = getZodError(err);
-  } else if (isAuthError) {
-    error = { ...err, code: 'unauthorized' };
-  } else if (!isKnownError) {
-    error = new InternalServerError(err.message);
-  }
+  const isLogged = isKnownServerError(err) || isUnknownServerError(err) && !isTestEnvironment();
 
-  const isTracingEnabled = !envConfig.isProduction && envConfig.NODE_ENV !== 'test' || isServerError(error) && !isTestEnvironment();
+  if (isLogged) { logger.error(err); }
 
-  if (isTracingEnabled) { logger.error(error); }
-  const trace = isTracingEnabled ? error.stack : undefined;
-
-  res.status(error.statusCode).json(new ErrorResponse(
-    error.code,
-    error.message,
-    trace
-  ));
+  res.status(response.statusCode).json(response);
 };
 
 export default () => [ unknownRoute, addErrorToRequestLog ];
+
+function getErrorResponse(err: ApplicationError): ErrorResponse {
+  let response: ErrorResponse;
+
+  let trace: typeof err.stack;
+  switch (true) {
+  case envConfig.NODE_ENV === 'development':
+  case envConfig.NODE_ENV === 'staging':
+    trace = err.stack;
+    break;
+  case envConfig.NODE_ENV === 'production':
+  case envConfig.NODE_ENV === 'test':
+  default:
+    trace = undefined;
+  }
+
+  switch (true) {
+  case err instanceof BadRequestError:
+  case err instanceof NotFoundError:
+  case err instanceof UnauthorizedError:
+  case err instanceof InternalDatabaseError:
+    response = new ErrorResponse(err.code, err.message, err.statusCode, [], trace);
+    break;
+  case err instanceof ValidationError:
+    response = new ErrorResponse(err.code, err.message, err.statusCode, err.fields, trace);
+    break;
+  default:
+    response = new ErrorResponse(
+      'internal_server_error',
+      'Unexpected error happened. Try again later.',
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      []);
+  }
+
+  return response;
+}

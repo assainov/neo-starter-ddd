@@ -75,6 +75,7 @@ export class User {
     const username = usernameOrNull || User.generateUsername(firstName, lastName);
 
     return new User({
+      id: undefined,
       firstName,
       lastName,
       email,

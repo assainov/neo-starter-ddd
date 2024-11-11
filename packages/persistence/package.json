@@ -19,8 +19,11 @@
   },
   "dependencies": {
     "@neo/application": "*",
+    "@neo/common-entities": "*",
     "@neo/domain": "*",
+    "@neo/express-tools": "*",
     "@prisma/client": "^5.22.0",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "prisma-error-enum": "^0.1.3"
   }
 }

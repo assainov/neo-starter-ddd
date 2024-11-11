@@ -1,6 +1,7 @@
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
+import responseTime from 'response-time';
 import scopedContainer from './middleware/scopedContainer';
 import requestLogger from './middleware/requestLogger';
 import errorHandler from './middleware/errorHandler';
@@ -29,6 +30,7 @@ export class AppServer extends BaseServer {
     this.app.use(cors({ origin: this._envConfig.CORS_ORIGIN, credentials: true }));
     this.app.use(helmet());
     this.app.use(rateLimiter);
+    this.app.use(responseTime());
 
     // Request logging
     this.app.use(requestLogger());

@@ -2,10 +2,18 @@ import path from 'node:path';
 import dotenv from 'dotenv';
 import { z } from 'zod';
 
-const fileName = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env';
+const getFilename = () => {
+  const env = process.env.NODE_ENV;
+
+  if (!env || env === 'development') {
+    return '.env';
+  }
+
+  return `.env.${env}`;
+};
 
 dotenv.config({
-  path: path.resolve(__dirname, `../../${fileName}`)
+  path: path.resolve(__dirname, `../../${getFilename()}`)
 });
 
 const validationSchema = z.object({
@@ -15,6 +23,8 @@ const validationSchema = z.object({
     .union([
       z.literal('development'),
       z.literal('test'),
+      z.literal('staging'),
+      z.literal('staging'),
       z.literal('production'),
     ])
     .default('development'),
