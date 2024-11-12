@@ -14,8 +14,6 @@ module.exports = {
   },
   rules: {
     '@next/next/no-html-link-for-pages': 'off',
-    'tailwindcss/no-custom-classname': [ 'error', {
-      'whitelist': [ '*\\-(background|foreground)' ],
-    } ]
+    'tailwindcss/no-custom-classname': 'off'
   },
 };

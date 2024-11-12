@@ -22,7 +22,7 @@ module.exports = {
 		"css"
   ],
   settings: {
-    "version": "detect",
+    "version": 19,
   },
   globals: {
     React: true,
