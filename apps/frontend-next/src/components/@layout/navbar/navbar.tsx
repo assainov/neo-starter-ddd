@@ -12,7 +12,7 @@ const Navbar = () => {
   return (
     <nav className="bg-background border-b">
       <div className="container">
-        <div className="flex h-[var(--header-height)] items-center justify-between">
+        <div className="flex h-[var(--header-height)] items-center justify-start">
           <div className="flex shrink-0 items-center space-x-4">
             <Link
               className="text-primary text-2xl font-bold"
@@ -21,11 +21,11 @@ const Navbar = () => {
               Neo Starter
             </Link>
           </div>
-          <DesktopNav />
-          <div className="hidden md:block">
+          <DesktopNav className='ml-10' />
+          <div className="ml-auto hidden md:block">
             <AuthButtons />
           </div>
-          <div className="md:hidden">
+          <div className="ml-auto md:hidden">
             <MobileNav
               isOpen={isOpen}
               setIsOpen={setIsOpen}

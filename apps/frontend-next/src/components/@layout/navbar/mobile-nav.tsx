@@ -1,6 +1,6 @@
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { menuItems } from './menu-items';
 import Link from 'next/link';
 import { AuthButtons } from './auth-buttons';
@@ -16,6 +16,9 @@ export const MobileNav = ({ isOpen, setIsOpen }: MobileNavProps) => (
     onOpenChange={setIsOpen}
     open={isOpen}
   >
+    <SheetTitle className='hidden'>
+      Mobile Menu
+    </SheetTitle>
     <SheetTrigger asChild>
       <Button
         aria-label="Open menu"
@@ -30,7 +33,8 @@ export const MobileNav = ({ isOpen, setIsOpen }: MobileNavProps) => (
       className="w-[240px] sm:w-[300px]"
       side="right"
     >
-      <nav className="mt-4 flex flex-col space-y-4">
+      <SheetDescription className='hidden'>Menu</SheetDescription>
+      <nav className="mt-4 flex h-full flex-col space-y-4 md:py-10">
         {menuItems.map((item) => (
           <Button
             asChild
@@ -41,7 +45,14 @@ export const MobileNav = ({ isOpen, setIsOpen }: MobileNavProps) => (
             <Link href={item.href}>{item.label}</Link>
           </Button>
         ))}
-        <AuthButtons className="flex-col items-stretch space-x-0 space-y-4" />
+        <div
+          aria-description='space-filler'
+          className='grow'
+        />
+        <AuthButtons
+          className="flex-col items-stretch space-x-0 space-y-4"
+          onClick={() => setIsOpen(false)}
+        />
         <GitHubButton className='flex md:hidden'/>
       </nav>
     </SheetContent>

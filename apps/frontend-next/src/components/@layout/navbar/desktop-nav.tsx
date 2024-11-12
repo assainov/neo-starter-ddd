@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { menuItems } from './menu-items';
 
-export const DesktopNav = () => (
-  <div className="hidden md:flex md:items-center md:space-x-4">
+export const DesktopNav = ({ className = '' }) => (
+  <div className={`hidden md:flex md:items-center md:space-x-4 ${className}`}>
     {menuItems.map((item) => (
       <Button
         asChild
