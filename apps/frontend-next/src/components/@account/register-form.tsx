@@ -11,12 +11,14 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-export const SignInForm = () => (
+export const RegisterForm = () => (
   <Card className="mx-auto max-w-sm">
     <CardHeader>
-      <CardTitle className="text-2xl">Login</CardTitle>
+      <CardTitle className="text-2xl">
+        Create an account
+      </CardTitle>
       <CardDescription>
-        Enter your email below to login to your account
+        Enter your email to start creating your account
       </CardDescription>
     </CardHeader>
     <CardContent>
@@ -33,12 +35,6 @@ export const SignInForm = () => (
         <div className="grid gap-2">
           <div className="flex items-center">
             <Label htmlFor="password">Password</Label>
-            {/* <Link
-              className="ml-auto inline-block text-sm underline"
-              href="#"
-            >
-              Forgot your password?
-            </Link> */}
           </div>
           <Input
             id="password"
@@ -50,7 +46,7 @@ export const SignInForm = () => (
           className="w-full"
           type="submit"
         >
-          Login
+          Start
         </Button>
         {/* <div className="relative my-4">
           <div className="absolute inset-0 flex items-center">
@@ -66,17 +62,16 @@ export const SignInForm = () => (
           className="w-full"
           variant="outline"
         >
-          <GoogleIcon />
           Google
         </Button> */}
       </div>
       <div className="mt-8 text-center text-sm">
-        Don&apos;t have an account?{' '}
+        Have an account already?{' '}
         <Link
           className="underline"
-          href="/sign-up"
+          href="/sign-in"
         >
-          Sign up
+          Log in
         </Link>
       </div>
     </CardContent>
