@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { GitHubButton } from './github-button';
 import { ROUTE } from '@/constants/routes';
 
-export const AuthButtons = ({ className = '', onClick }: { className: string; onClick: () => void }) => (
+export const AuthButtons = ({ className = '', onClick = () => {} }) => (
   <div className={`flex items-center space-x-2 ${className}`}>
     <GitHubButton className='hidden md:flex' />
     <Button

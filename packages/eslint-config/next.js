@@ -13,6 +13,7 @@ module.exports = {
 		"plugin:react/jsx-runtime",
 		"plugin:react-hooks/recommended",
     "plugin:css/recommended",
+    "plugin:@tanstack/query/recommended"
   ],
   plugins: [ 
     "react",
