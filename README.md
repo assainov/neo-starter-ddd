@@ -1,8 +1,17 @@
-# Neo starter
+# Motivation
+>
+You have a project / idea in your mind, and you're excited about it. You jump right into implementation, but soon realize it takes days if not weeks to only configure the basic things like linting, authentication, validation, etc. On top of that, you want to adhere to the best architectural practices making your codebase scalable from the start.
 
-Neo Starter DDD is a template that provides an easier and faster way to start a project using Next.js, Node.js and TypeScript. It's a monorepo that focuses on a proper implementation of Clean Architecture and DDD, which is achieved by [truly] isolating layers using a concept of packages. It also comes with some awesome out-of-the-box features (see Backend / Frontend sections below).
+What if there was an easy boilerplate that uses the best practices from enterprise architecture while balancing the speed of development?
+Meet Neo Starter DDD.
 
-### A note about Clean Architecture and Domain-Driven Design (DDD)
+Neo Starter DDD is a boilerplate project that provides an easier and faster way to start a TypeScript project. It's a monorepo that focuses on a proper implementation of Clean Architecture and DDD, which is achieved by [truly] isolating Domain and Application layers. It also comes with some awesome out-of-the-box features (see `Backend Express` / `Frontend Next` sections below).
+
+There are 2 distinct purposes for this boilerplate:
+1) It provides a clear way to write a framework-free business logic for domain and application layers - thus making it able to reuse the code across frameworks and platforms.
+2) So you can jumpstart a new project using Express.js and Next.js without spending weeks on the project configuration and some basic features.
+
+### About Clean Architecture and Domain-Driven Design (DDD)
 
 Clean architecture is a set of design principles that helps developers build software that is maintainable, testable, and adaptable.
 [Learn more about Clean Architecture here.](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
@@ -12,7 +21,7 @@ The best starting point for DDD is to [watch this video](https://www.youtube.com
 
 <img src="./assets/clean-architecture.jpg" alt="Clean architecture diagram" width="600"/>
 
-## Backend
+## Backend Express
 An Express.js API server with all the pre-configured features & tools such as:
 - DDD and Clean architecture
 - Dependency injection
@@ -31,7 +40,7 @@ An Express.js API server with all the pre-configured features & tools such as:
 
 You can easily switch the implementations by providing a different package to the DI container.
 
-## Frontend 
+## Frontend Next
 A Next.js app with pre-configured lint, tsconfig and Shadcn component library. It comes with a layout, home page, navigation and authentication wired up to call our backend service.
 
 ## Packages
