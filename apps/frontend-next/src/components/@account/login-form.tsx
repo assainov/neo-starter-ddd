@@ -15,15 +15,21 @@ import { loginUserBodySchema, LoginUserBody } from '@neo/application/user';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ROUTE } from '@/constants/routes';
+import { useLogin } from '@/lib/api/auth/mutations';
+import { useNotifications } from '../@layout/notifications';
 
 export const LoginForm = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginUserBody>({
     resolver: zodResolver(loginUserBodySchema),
   });
+  const login = useLogin({ onSuccess: () => useNotifications.getState().addNotification({
+    type: 'success',
+    title: 'Logged in.',
+    message: 'You have successfully logged in.',
+  }) });
 
   const onSubmit: SubmitHandler<LoginUserBody> = async (data) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log(data);
+    login.mutate(data);
   };
 
   return (

@@ -15,15 +15,21 @@ import { ROUTE } from '@/constants/routes';
 import { RegisterUserBody, registerUserBodySchema } from '@neo/application/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useRegister } from '@/lib/api/auth/mutations';
+import { useNotifications } from '../@layout/notifications';
 
 export const RegisterForm = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<RegisterUserBody>({
     resolver: zodResolver(registerUserBodySchema),
   });
+  const registering = useRegister({ onSuccess: () => useNotifications.getState().addNotification({
+    type: 'success',
+    title: 'Account created',
+    message: 'You have successfully created an account',
+  }) });
 
-  const onSubmit: SubmitHandler<RegisterUserBody> = async (data) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log(data);
+  const onSubmit: SubmitHandler<RegisterUserBody> = (data) => {
+    registering.mutate(data);
   };
 
   return (
