@@ -5,17 +5,17 @@
   "tsx": true,
   "tailwind": {
     "config": "tailwind.config.ts",
-    "css": "src/app/globals.css",
+    "css": "app/_styles/globals.css",
     "baseColor": "neutral",
     "cssVariables": true,
     "prefix": ""
   },
   "aliases": {
-    "components": "@/components",
-    "utils": "@/lib/utils",
-    "ui": "@/components/ui",
-    "lib": "@/lib",
-    "hooks": "@/hooks"
+    "components": "@/_shared",
+    "utils": "@/_services/shadcn",
+    "ui": "@/_shared/ui",
+    "lib": "@/_services",
+    "hooks": "@/_hooks"
   },
   "iconLibrary": "lucide"
 }
