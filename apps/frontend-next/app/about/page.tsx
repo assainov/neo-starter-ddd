@@ -1,10 +1,9 @@
-
-const About = ()=> (
+const About = () => (
   <div className="container flex flex-col items-start gap-2 py-12 font-sans">
     <h1 className="text-2xl font-semibold tracking-tight">
       About
     </h1>
-    <p className="text-primary text-md leading-7">
+    <p className="text-md text-primary leading-7">
       Neo Starter DDD is a template that provides an easier and faster way to start a project using Next.js, Node.js and TypeScript.
       <br />
       <br />

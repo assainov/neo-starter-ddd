@@ -109,5 +109,8 @@ module.exports = {
       'react/no-unknown-property': 'error',
       'react/prefer-es6-class': 'error',
       'react/sort-comp': 'error',
+      '@next/next/no-html-link-for-pages': 'off',
+      'tailwindcss/no-custom-classname': 'off',
+      'space-infix-ops': [ 'error', { 'int32Hint': false } ]
   }
 };

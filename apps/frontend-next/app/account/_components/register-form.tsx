@@ -16,7 +16,7 @@ import { RegisterUserBody, registerUserBodySchema } from '@neo/application/user'
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useRegister } from '../_api/mutations';
-import { useNotifications } from '../../_shared/ui/notifications';
+import { useNotifications } from '../../_shared/notifications';
 
 export const RegisterForm = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<RegisterUserBody>({

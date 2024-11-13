@@ -1,4 +1,4 @@
-import { useNotifications } from '../_shared/ui/notifications';
+import { useNotifications } from '../_shared/notifications';
 import { env } from '../_config/env';
 
 type RequestOptions = {

@@ -16,7 +16,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ROUTE } from '../../_config/routes';
 import { useLogin } from '../_api/mutations';
-import { useNotifications } from '../../_shared/ui/notifications';
+import { useNotifications } from '../../_shared/notifications';
 
 export const LoginForm = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginUserBody>({

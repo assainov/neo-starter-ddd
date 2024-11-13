@@ -1,6 +1,6 @@
 'use client';
 
-import { Notifications } from './_shared/ui/notifications';
+import { Notifications } from './_shared/notifications';
 import { env } from './_config/env';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';

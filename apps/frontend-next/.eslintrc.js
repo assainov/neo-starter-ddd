@@ -12,8 +12,5 @@ module.exports = {
     },
     tsconfigRootDir: __dirname
   },
-  rules: {
-    '@next/next/no-html-link-for-pages': 'off',
-    'tailwindcss/no-custom-classname': 'off'
-  },
+  ignorePatterns: [ '**/ui/**' ], // ignore shadcn components
 };
