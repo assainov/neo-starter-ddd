@@ -1,30 +1,55 @@
 import Link from 'next/link';
-import { UserPlus, LogIn } from 'lucide-react';
+import { UserPlus, LogIn, LogOut } from 'lucide-react';
 import { Button } from '../../_shared/ui/button';
 import { GitHubButton } from './github-button';
 import { ROUTE } from '../../_config/routes';
+import { useAuth } from '@/_hooks/useAuth';
+import { useLogout } from '@/_hooks/useLogoutAction';
 
-export const AuthButtons = ({ className = '', onClick = () => {} }) => (
-  <div className={`flex items-center space-x-2 ${className}`}>
-    <GitHubButton className='hidden md:flex' />
-    <Button
-      asChild
-      onClick={onClick}
-      variant="ghost"
-    >
-      <Link href={ROUTE.AccountLogin}>
-        <LogIn className="mr-2 size-4" />
-        Login
-      </Link>
-    </Button>
-    <Button
-      asChild
-      onClick={onClick}
-    >
-      <Link href={ROUTE.AccountRegister}>
-        <UserPlus className="mr-2 size-4" />
-        Register
-      </Link>
-    </Button>
-  </div>
-);
+export const AuthButtons = ({ className = '', onClose = () => {} }) => {
+  const { user, isAuthenticated, isLoggingIn } = useAuth();
+  const logout = useLogout();
+  return (
+    <div className={`flex items-center space-x-2 ${className}`}>
+      <GitHubButton className='hidden md:flex' />
+      { isLoggingIn ? 'Loading...' : isAuthenticated ? (
+        <>
+          <span>Welcome, {user?.firstName}</span>
+          <Button
+            onClick={() => {
+              logout();
+
+              onClose();
+            }}
+            variant="ghost"
+          >
+            <LogOut className="mr-2 size-4" />
+            Logout
+          </Button>
+        </>
+      ) : (
+        <>
+          <Button
+            asChild
+            onClick={onClose}
+            variant="ghost"
+          >
+            <Link href={ROUTE.AccountLogin}>
+              <LogIn className="mr-2 size-4" />
+              Login
+            </Link>
+          </Button>
+          <Button
+            asChild
+            onClick={onClose}
+          >
+            <Link href={ROUTE.AccountRegister}>
+              <UserPlus className="mr-2 size-4" />
+              Register
+            </Link>
+          </Button>
+        </>
+      ) }
+    </div>
+  );
+};

@@ -31,11 +31,11 @@ export class AppServer extends BaseServer {
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cors({ origin: this._envConfig.CORS_ORIGIN, credentials: true }));
     this.app.use(helmet());
-    this.app.use(rateLimiter);
     this.app.use(responseTime());
 
     // Request logging
     this.app.use(requestLogger());
+    if (this._envConfig.isProduction) this.app.use(rateLimiter);
 
     this.app.use(nocache());
 

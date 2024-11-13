@@ -1,32 +1,38 @@
 'use client';
 import Link from 'next/link';
 
-import { Button } from '../../_shared/ui/button';
+import { Button } from '@/_shared/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../../_shared/ui/card';
-import { Input } from '../../_shared/ui/input';
-import { Label } from '../../_shared/ui/label';
-import { ROUTE } from '../../_config/routes';
+} from '@/_shared/ui/card';
+import { Input } from '@/_shared/ui/input';
+import { Label } from '@/_shared/ui/label';
+import { ROUTE } from '@/_config/routes';
 import { RegisterUserBody, registerUserBodySchema } from '@neo/application/user';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useRegister } from '../_api/mutations';
-import { useNotifications } from '../../_shared/notifications';
+import { useNotifications } from '@/_shared/notifications';
+import { useRouter } from 'next/navigation';
+import { useRegisterMutation } from '@/account/_api/mutations';
 
 export const RegisterForm = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<RegisterUserBody>({
     resolver: zodResolver(registerUserBodySchema),
   });
-  const registering = useRegister({ onSuccess: () => useNotifications.getState().addNotification({
-    type: 'success',
-    title: 'Account created',
-    message: 'You have successfully created an account',
-  }) });
+  const router = useRouter();
+  const registering = useRegisterMutation({ onSuccess: () => {
+    useNotifications.getState().addNotification({
+      type: 'success',
+      title: 'Account created',
+      message: 'Please login to continue.',
+    });
+
+    router.push(ROUTE.AccountLogin);
+  } });
 
   const onSubmit: SubmitHandler<RegisterUserBody> = (data) => {
     registering.mutate(data);

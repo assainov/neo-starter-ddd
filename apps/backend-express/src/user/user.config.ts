@@ -13,10 +13,18 @@ export const authCookieName = 'app_token';
  * @property {number} maxAge - The maximum age of the cookie in seconds (30 days).
  * @property {string} path - The URL path that must exist in the requested URL for the browser to send the Cookie header.
  */
-export const authCookieOptions: SerializeOptions = {
+export const loginCookieOptions: SerializeOptions = {
   httpOnly: true,
   sameSite: 'strict',
   secure: envConfig.isProduction,
   maxAge: 60 * 60 * 24 * 30,
+  path: '/',
+};
+
+export const logoutCookieOptions: SerializeOptions = {
+  httpOnly: true,
+  sameSite: 'strict',
+  secure: envConfig.isProduction,
+  maxAge: -1,
   path: '/',
 };

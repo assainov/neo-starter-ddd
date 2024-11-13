@@ -51,7 +51,7 @@ export const MobileNav = ({ isOpen, setIsOpen }: MobileNavProps) => (
         />
         <AuthButtons
           className="flex-col items-stretch space-x-0 space-y-4"
-          onClick={() => setIsOpen(false)}
+          onClose={() => setIsOpen(false)}
         />
         <GitHubButton className='flex md:hidden'/>
       </nav>

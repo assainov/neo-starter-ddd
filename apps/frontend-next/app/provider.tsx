@@ -7,19 +7,30 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { MainErrorFallback } from './_components/error';
+import { useState } from 'react';
 
 type AppProviderProps = {
   children: React.ReactNode;
 };
 
-const queryClient = new QueryClient();
+export const AppProvider = ({ children }: AppProviderProps) => {
+  const [ queryClient ] = useState(() => new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        retry: false,
+        staleTime: 1000 * 60,
+      }
+    }
+  }));
 
-export const AppProvider = ({ children }: AppProviderProps) => (
-  <ErrorBoundary FallbackComponent={MainErrorFallback}>
-    <QueryClientProvider client={queryClient}>
-      {env.isDevelopment ? <ReactQueryDevtools /> : null}
-      <Notifications />
-      {children}
-    </QueryClientProvider>
-  </ErrorBoundary>
-);
+  return (
+    <ErrorBoundary FallbackComponent={MainErrorFallback}>
+      <QueryClientProvider client={queryClient}>
+        {env.isDevelopment ? <ReactQueryDevtools /> : null}
+        <Notifications />
+        {children}
+      </QueryClientProvider>
+    </ErrorBoundary>
+  );
+};

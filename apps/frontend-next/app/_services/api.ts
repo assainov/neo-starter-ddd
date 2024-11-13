@@ -9,6 +9,7 @@ type RequestOptions = {
   params?: Record<string, string | number | boolean | undefined | null>;
   cache?: RequestCache;
   next?: NextFetchRequestConfig;
+  isSilent?: boolean;
 };
 
 function buildUrlWithParams(
@@ -59,6 +60,7 @@ async function fetchApi<T>(
     params,
     cache = 'no-store',
     next,
+    isSilent
   } = options;
 
   // Get cookies from the request when running on server
@@ -85,7 +87,7 @@ async function fetchApi<T>(
 
   if (!response.ok) {
     const message = (await response.json()).message || response.statusText;
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && !isSilent) {
       useNotifications.getState().addNotification({
         type: 'error',
         title: 'Error',
@@ -113,5 +115,9 @@ export const api = {
   },
   delete<T>(url: string, options?: RequestOptions): Promise<T> {
     return fetchApi<T>(url, { ...options, method: 'DELETE' });
+  },
+  // Allows to make a silent request to check authentication status. We don't want to show notifications in this case.
+  getSilently<T>(url: string, options?: RequestOptions): Promise<T> {
+    return fetchApi<T>(url, { ...options, method: 'GET', isSilent: true });
   },
 };

@@ -1,35 +1,43 @@
 'use client';
 import Link from 'next/link';
 
-import { Button } from '../../_shared/ui/button';
+import { Button } from '@/_shared/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../../_shared/ui/card';
-import { Input } from '../../_shared/ui/input';
-import { Label } from '../../_shared/ui/label';
+} from '@/_shared/ui/card';
+import { Input } from '@/_shared/ui/input';
+import { Label } from '@/_shared/ui/label';
 import { loginUserBodySchema, LoginUserBody } from '@neo/application/user';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ROUTE } from '../../_config/routes';
-import { useLogin } from '../_api/mutations';
-import { useNotifications } from '../../_shared/notifications';
+import { ROUTE } from '@/_config/routes';
+import { useNotifications } from '@/_shared/notifications';
+import { useRouter } from 'next/navigation';
+import { useLoginMutation } from '@/account/_api/mutations';
 
 export const LoginForm = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginUserBody>({
     resolver: zodResolver(loginUserBodySchema),
   });
-  const login = useLogin({ onSuccess: () => useNotifications.getState().addNotification({
-    type: 'success',
-    title: 'Logged in.',
-    message: 'You have successfully logged in.',
-  }) });
+  const router = useRouter();
+  const addNotification = useNotifications(s => s.addNotification);
+
+  const login = useLoginMutation();
 
   const onSubmit: SubmitHandler<LoginUserBody> = async (data) => {
-    login.mutate(data);
+    await login.mutateAsync(data);
+
+    addNotification({
+      type: 'success',
+      title: 'Logged in.',
+      message: 'You have successfully logged in.',
+    });
+
+    router.push(ROUTE.Home);
   };
 
   return (
