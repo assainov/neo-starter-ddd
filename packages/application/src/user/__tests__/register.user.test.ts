@@ -3,6 +3,7 @@ import { mockServices, mockUsers } from './mocks';
 import { UserDto } from '../common.dto';
 import { registerUserHandler } from '../register.user.handler';
 import { compareUserDtos } from './utils/compareUserDtos';
+import { InternalDatabaseError } from '@neo/common-entities';
 
 describe('User', () => {
   describe('Register', () => {
@@ -33,7 +34,8 @@ describe('User', () => {
         ...mockServices,
         db: { ...mockServices.db,
           userRepository: { ...mockServices.db.userRepository,
-            getByEmail: vi.fn().mockReturnValue(mockUser) } } };
+            create: vi.fn().mockRejectedValue(
+              new InternalDatabaseError(`User with email ${mockUser.email} already exists`)) } } };
 
       await expect(registerUserHandler({ di, newUserDto: { ...mockUser, password: '123456' } })).rejects.toThrow(`User with email ${mockUser.email} already exists`);
     });

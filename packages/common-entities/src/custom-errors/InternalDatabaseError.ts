@@ -12,6 +12,6 @@ export class InternalDatabaseError extends ApplicationError {
     super(message);
 
     this.code = 'database_error';
-    this.statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
+    this.statusCode = StatusCodes.BAD_REQUEST;
   }
 }

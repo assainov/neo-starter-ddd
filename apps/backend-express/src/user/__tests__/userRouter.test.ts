@@ -7,9 +7,7 @@ import { ErrorResponse } from '@neo/common-entities';
 import { seedData } from '@neo/persistence/prisma';
 import useServer from '@/_server/helpers/tests/useServer';
 import useDatabase from '@/_server/helpers/tests/useDatabase';
-import jwt from 'jsonwebtoken';
 import { envConfig } from '@/_server/envConfig';
-import { TokenPayload } from '@neo/domain/user';
 import JwtTokenService from '@neo/security/jwtTokenService';
 import {
   SearchUsersResponse,
@@ -19,6 +17,8 @@ import {
   LoginUserResponse,
   UserDetailsResponse
 } from '@neo/application/user';
+import { authCookieName, authCookieOptions } from '../user.config';
+import { serialize } from 'cookie';
 
 describe('User API Endpoints', () => {
   useDatabase();
@@ -69,7 +69,7 @@ describe('User API Endpoints', () => {
 
       // Assert
       expect(response.statusCode).toEqual(StatusCodes.NOT_FOUND);
-      expect(responseBody.code).toEqual('not_found');
+      expect(responseBody.code).toEqual('not_found_error');
       expect(responseBody.message).toEqual('User not found');
     });
   });
@@ -117,13 +117,13 @@ describe('User API Endpoints', () => {
       // Assert
       expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
       expect(responseBody).toBeTruthy();
-      expect(responseBody.code).toEqual('validation_error');
+      expect(responseBody.code).toEqual('database_error');
       expect(responseBody.message).toEqual(`User with email ${newUser.email} already exists`);
     });
   });
 
   describe('GET /users/login', () => {
-    it('should successfully return the correct access token', async () => {
+    it('should login successfully and return null', async () => {
       // Arrange
       const app = getApp();
       const existing = {
@@ -137,14 +137,11 @@ describe('User API Endpoints', () => {
 
       // Assert
       expect(response.statusCode).toEqual(StatusCodes.OK);
-      expect(responseBody).toBeTruthy();
-      expect(responseBody.accessToken).toBeTruthy();
+      expect(responseBody).toEqual({});
 
-      const payload = jwt.verify(responseBody.accessToken as string, envConfig.JWT_SECRET) as TokenPayload;
+      const cookieHeader = response.headers['Set-Cookie'] as string;
 
-      expect(payload.email).toEqual(existing.email);
-      expect(payload.id).toEqual(bob?.id);
-      expect(payload.lastLoginAt).toBeDefined();
+      expect(cookieHeader).toBeUndefined(); // we expect the Set-Cookie to be secure and non-readable :)
     });
 
     it('should return invalid credentials', async () => {
@@ -162,7 +159,7 @@ describe('User API Endpoints', () => {
       // Assert
       expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
       expect(responseBody).toBeTruthy();
-      expect(responseBody.code).toEqual('bad_request');
+      expect(responseBody.code).toEqual('bad_request_error');
       expect(responseBody.message).toContain('Invalid');
     });
   });
@@ -191,8 +188,10 @@ describe('User API Endpoints', () => {
       const tokenService = new JwtTokenService({ envConfig });
       const token = tokenService.generateToken(payload);
 
+      const authCookie = serialize(authCookieName, token, authCookieOptions);
+
       // Act
-      const response = await request(app as App).get('/users/me').set('Authorization', `Bearer ${token}`);
+      const response = await request(app as App).get('/users/me').set('Cookie', authCookie);
       const responseBody = response.body as UserDetailsResponse;
 
       // Assert

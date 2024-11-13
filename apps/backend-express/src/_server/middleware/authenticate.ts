@@ -4,6 +4,7 @@ import { logger } from '@neo/express-tools/logger';
 import { TokenPayload } from '@neo/domain/user';
 import { envConfig } from '../envConfig';
 import { UnauthorizedError } from '@neo/common-entities';
+import { authCookieName } from '@/user/user.config';
 
 /**
  * Middleware to authenticate a user based on the Authorization header.
@@ -13,18 +14,14 @@ import { UnauthorizedError } from '@neo/common-entities';
  * });
  */
 export const authenticate: RequestHandler<unknown, unknown, unknown, unknown> = (req, res, next) => {
-  const header = req.header('Authorization');
-  if (!header) {
+  const accessToken = req.cookies[authCookieName];
+
+  if (!accessToken) {
     throw new UnauthorizedError('Authorization failed');
   }
 
-  if (!header.startsWith('Bearer ')) {
-    throw new UnauthorizedError('Invalid authorization header');
-  }
-
   try {
-    const token = header.slice(7);
-    const payload = jwt.verify(token, envConfig.JWT_SECRET);
+    const payload = jwt.verify(accessToken, envConfig.JWT_SECRET);
 
     if (!payload) throw new UnauthorizedError('Invalid token');
 

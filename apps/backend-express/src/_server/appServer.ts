@@ -8,6 +8,7 @@ import errorHandler from './middleware/errorHandler';
 import rateLimiter from './middleware/rateLimiter';
 import { Registry } from '../container';
 import nocache from 'nocache';
+import cookieParser from 'cookie-parser';
 
 import 'express-async-errors';
 import { BaseServer } from './helpers/baseServer';
@@ -26,6 +27,7 @@ export class AppServer extends BaseServer {
 
     // Middlewares
     this.app.use(express.json());
+    this.app.use(cookieParser());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cors({ origin: this._envConfig.CORS_ORIGIN, credentials: true }));
     this.app.use(helmet());

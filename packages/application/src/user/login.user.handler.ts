@@ -7,14 +7,16 @@ export const loginUserBodySchema = z.object({
   password: z.string().min(6),
 });
 export const loginUserRequestSchema = z.object({ body: loginUserBodySchema });
-export const loginUserResponseSchema = z.object({
-  accessToken: z.string().min(1).optional(),
+export const loginUserResponseSchema = z.object({});
+export const loginUserHandlerResultSchema = z.object({
+  accessToken: z.string().min(1),
 });
 
 export type LoginUserBody = z.infer<typeof loginUserBodySchema>;
 export type LoginUserResponse = z.infer<typeof loginUserResponseSchema>;
+export type LoginUserHandlerResult = z.infer<typeof loginUserHandlerResultSchema>;
 
-export const loginUserHandler = async ({ di, loginDto }: { loginDto: LoginUserBody; di: IUserDI; }) => {
+export const loginUserHandler = async ({ di, loginDto }: { loginDto: LoginUserBody; di: IUserDI; }): Promise<LoginUserHandlerResult> => {
   const { email, password } = loginDto;
 
   const user = await di.db.userRepository.getByEmail(email);
@@ -27,5 +29,5 @@ export const loginUserHandler = async ({ di, loginDto }: { loginDto: LoginUserBo
 
   await di.db.userRepository.update(user);
 
-  return loginUserResponseSchema.parse({ accessToken });
+  return loginUserHandlerResultSchema.parse({ accessToken });
 };
