@@ -2,23 +2,26 @@
 
 ### Motivation
 >
-You have a project / idea in your mind, and you're excited about it. You jump right into implementation, but soon realize it takes days if not weeks to only configure the basic things like linting, authentication, validation, etc. On top of that, you want to adhere to the best architectural practices making your codebase scalable from the start.
+You have a new project in your mind, and you're excited about it. You jump right into implementation, but soon realize it takes days if not weeks to only configure the basic things like project structure, linting, authentication, validation and so on. In addition, you want to use the best architectural practices making your codebase scalable from the start.
 
 What if there was an easy boilerplate that uses the best practices from enterprise architecture while balancing the speed of development?
+
 Meet Neo Starter DDD.
 
-Neo Starter DDD is a boilerplate project that provides an easier and faster way to start a TypeScript project. It's a monorepo that focuses on a proper implementation of Clean Architecture and DDD, which is achieved by [truly] isolating Domain and Application layers. It also comes with some awesome out-of-the-box features (see `Backend Express` / `Frontend Next` sections below).
+Neo Starter DDD is a boilerplate project that provides an easier and faster way to start a TypeScript project. It's a monorepo that focuses on a proper implementation of Clean Architecture and DDD, which is achieved by [truly] isolating Domain, Application and Infrastructure layers. It also comes with some out-of-the-box features (more on this below).
 
 There are 2 distinct purposes for this boilerplate:
-1) It provides a clear way to write a framework-free business logic for domain and application layers - thus making it able to reuse the code across frameworks and platforms.
-2) So you can jumpstart a new project using Express.js and Next.js without spending weeks on the project configuration and some basic features.
+1) It provides a clear way to write a framework-free business logic in domain and application layers - thus making you able to reuse the code across frameworks and platforms.
+2) Allows you to jumpstart a new project using Express.js and Next.js without spending weeks on the project configuration and some basic features.
 
-### About Clean Architecture and Domain-Driven Design (DDD)
+### What is Clear Architecture (CA)?
 
-Clean architecture is a set of design principles that helps developers build software that is maintainable, testable, and adaptable.
+CA is a set of design principles that helps developers build software that is easily scalable, maintainable and extensible.
 [Learn more about Clean Architecture here.](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 
-DDD is an approach of building your software based on the real-world business structure, which will operate this software. The main goal is to tackle complexity by breaking our potentially huge spagetti code into smaller "apps" or "sub-apps".
+### What is Domain-Driven Design (DDD)?
+
+DDD is an approach of building your software around the real-world business structure, which is planned to operate this software. The main goal is to tackle complexity by breaking our potentially huge spagetti code into smaller "apps" or "sub-apps".
 The best starting point for DDD is to [watch this video](https://www.youtube.com/watch?v=pMuiVlnGqjk). 
 
 <img src="./assets/clean-architecture.jpg" alt="Clean architecture diagram" width="600"/>
