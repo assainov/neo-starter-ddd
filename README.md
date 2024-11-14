@@ -1,4 +1,6 @@
-# Motivation
+# NEO Starter - Domain Driven Design
+
+### Motivation
 >
 You have a project / idea in your mind, and you're excited about it. You jump right into implementation, but soon realize it takes days if not weeks to only configure the basic things like linting, authentication, validation, etc. On top of that, you want to adhere to the best architectural practices making your codebase scalable from the start.
 
