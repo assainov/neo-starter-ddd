@@ -26,6 +26,45 @@ The best starting point for DDD is to [watch this video](https://www.youtube.com
 
 <img src="./assets/clean-architecture.jpg" alt="Clean architecture diagram" width="600"/>
 
+## Monorepo Structure
+
+The monorepo is powered by [Turborepo](https://turbo.build/repo/docs) - an easy to get started tool to manage multiple NPM workspaces.
+
+An example of the structure of the growing project:
+```
+apps                  # apps folder contains projects that can be compiled and deployed
+|
++-- backend-express   # a minimal express server layer. Only contains framework-specific code.
+|
++-- backend-cdk       # a minimal serverless codebase. Only contains framework-specific code.
+|
++-- backend-nest      # a minimal nest.js backend. Only contains framework-specific code.
+|
++-- dashboard-next    # a next.js frontend for users
+|
++-- admin-angular      # an angular frontend for an admin interface (for example)
+
+
+packages
+|
++-- application       # a framework-agnostic application layer
+|
++-- domain            # a framework-agnostic domain layer
+|
++-- common-entities   # common backend and frontend entities like Erros and DTOs
+|
++-- eslint-config     # global Eslint root configuration
+|
++-- express-tools     # express.js-specific common libraries and implementations
+|
++-- persistence       # injectable database layer. Can be multiple databases at once.
+|
++-- security          # injectable security services like JWT and Encryption 
+|
++-- typescript-config # global TypeScript root configuration
+
+```
+
 ## Backend Express
 An Express.js API server with all the pre-configured features & tools such as:
 - DDD and Clean architecture
@@ -45,8 +84,80 @@ An Express.js API server with all the pre-configured features & tools such as:
 
 You can easily switch the implementations by providing a different package to the DI container.
 
-## Frontend Next
-A Next.js app with pre-configured lint, tsconfig and Shadcn component library. It comes with a layout, home page, navigation and authentication wired up to call our backend service.
+### Sample Backend Express Structure
+
+```
+src
+|
++-- _server                       # framework-specific code like server configuration, middleware and so on.
+|
++-- container.ts                  # a DI container for connecting implementations to interfaces
+|
++-- (sample_feature)              # any API feature such as `users` that composes multiple co- files
+    |                 
+    +-- __tests__                 # co-local feature tests
+    |                 
+    +-- (feature).config.ts       # feature configuration
+    |                 
+    +-- (feature).controller.ts   # controller and routes related to a feature
+    |                 
+    +-- (feature).di.ts           # feature-scoped dependency injection container
+    |                 
+    +-- (feature).module.ts       # a module is an initialization code for the feature. It glues everything together.
+    |                 
+    +-- (feature).openapi.ts      # a generated OpenAPI and Swagger documentation for this feature
+
+```
+
+## Sample Frontend JS Next Features
+
+A Next.js app with features:
+- Next.js 15 with App Router & Server Components
+- Authentication boilerplate with Registration & Login
+- Tailwind - for CSS
+- Shadcn - for component library
+- React Query - for server API actions
+- Zustand - for state management
+- React Hook Form + Zod - for forms and validation
+
+### Sample Frontend Next JS Structure
+
+```
+app
+|
+
++-- _assets           # assets folder can contain all the static files such as images, fonts, etc.
+|
++-- _components       # components for the top-level "root / home" feature
+|
++-- _config           # global configurations, exported env variables etc.
+|
++-- _hooks            # shared hooks used across all features
+|
++-- _services         # reusable libraries and services
+|
++-- _shared           # global components shared across all features
+|
++-- _state            # global state stores
+|
++-- _styles           # global styles
+|
++-- (sample_feature)  # an example of feature that has its own co-located files. Example: `account`
+|   |                 
+|   +-- _api          # co-local api hooks and helpers
+|   |                 
+|   +-- _components   # co-local reusable components
+|   |                 
+|   +-- _config       # co-local configurations and constants
+|   |                 
+|   +-- _hooks        # co-local reusable hooks
+|   |                 
+|   +-- (sub_feature) # application provider that wraps the entire application with different global providers
+|        |                 
+|        +-- ...      # sub_feature co-local files similar to parent structure
+|        +-- ...      
+|        +-- ...      
+```
 
 ## Packages
 
@@ -66,12 +177,32 @@ A collection of monorepo packages that can be reused between apps. Also `domain`
 
 ## Usage
 
-### Build
+### Environment
 
-To build all apps and packages, run the following command in the root directory:
+Each application has a `.env.example` file to help you configure the env variables.
+
+Make sure you have the following installed in your machine:
+- Postgres database
+
+Helpful VS code extensions (optional):
+  - ESLint - for auto-formatting
+  - Prisma - ORM syntax highlighting
+  - Tailwind CSS IntelliSense - syntax autocompletion
+  - Vitest - easier tests
+
+
+### Prepare the ORM and database
+
+1) enerate the Prisma client based on the latest schema:
 
 ```
-npm run build
+cd packages/persistence && npx prisma generate
+```
+
+2) Apply the latest database migrations:
+
+```
+cd packages/persistence && npx prisma migrate dev
 ```
 
 ### Develop
@@ -97,3 +228,28 @@ To check for linting issues all apps and packages:
 ```
 npm run lint
 ```
+
+### Build & Start
+
+To build all apps and packages and start, run the following commands in the root directory:
+
+```
+npm run build
+npm run start
+```
+
+### Clean modules
+
+```
+npm run clean
+```
+
+## Credits
+
+This project is kick started by [Ilyas Assainov](https://www.linkedin.com/in/ilyas-assainov/). Please create an issue or PR if you want to contribute.
+Get in touch with him if you need help with your project.
+
+A few helpful repos were used to build this starter:
+
+- [bulletproof-react](https://github.com/alan2207/bulletproof-react)
+- [express-typescript-2024](https://github.com/edwinhern/express-typescript-2024) 
