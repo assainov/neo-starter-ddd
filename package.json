@@ -5,9 +5,10 @@
     "build": "turbo build",
     "clean": "turbo run clean && rm -rf node_modules",
     "dev": "turbo dev",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "schema:generate": "turbo schema:generate",
     "start": "turbo start",
     "test": "turbo test"
   },

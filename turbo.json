@@ -6,11 +6,6 @@
     "LOG_LEVEL"
   ],
   "tasks": {
-    "start": {
-      "dependsOn": [
-        "^start"
-      ]
-    },
     "build": {
       "dependsOn": [
         "^build"
@@ -29,9 +24,28 @@
         "^clean"
       ]
     },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
     "lint": {
       "dependsOn": [
         "^lint"
+      ]
+    },
+    "lint:fix": {
+      "dependsOn": [
+        "^lint:fix"
+      ]
+    },
+    "schema:generate": {
+      "dependsOn": [
+        "^schema:generate"
+      ]
+    },
+    "start": {
+      "dependsOn": [
+        "^start"
       ]
     },
     "test": {
@@ -41,15 +55,6 @@
       "env": [
         "VITEST"
       ]
-    },
-    "lint:fix": {
-      "dependsOn": [
-        "^lint:fix"
-      ]
-    },
-    "dev": {
-      "cache": false,
-      "persistent": true
     }
   }
 }
