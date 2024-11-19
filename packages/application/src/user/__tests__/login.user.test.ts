@@ -18,13 +18,15 @@ describe('User', () => {
         encryptionService: { ...mockServices.encryptionService,
           comparePassword: vi.fn().mockReturnValue(true) },
         tokenService: { ...mockServices.tokenService,
-          generateToken: vi.fn().mockReturnValue('mySuperSecureToken=)') }
+          generateAccessToken: vi.fn().mockReturnValue('mySuperSecureAccessToken=)'),
+          generateRefreshToken: vi.fn().mockReturnValue('mySuperSecureRefreshToken=)') }
       };
 
       const response = await loginUserHandler({ di, loginDto: { email, password } });
 
       expect(response).toBeDefined();
-      expect(response.accessToken).toEqual('mySuperSecureToken=)');
+      expect(response.accessToken).toEqual('mySuperSecureAccessToken=)');
+      expect(response.refreshToken).toEqual('mySuperSecureRefreshToken=)');
     });
 
     it('should throw an error on unexisting error', async () => {

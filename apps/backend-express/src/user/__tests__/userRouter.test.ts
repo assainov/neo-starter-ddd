@@ -17,7 +17,9 @@ import {
   LoginUserResponse,
   UserDetailsResponse
 } from '@neo/application/user';
-import { authCookieName, authCookieOptions } from '../user.config';
+import { AccessTokenPayload, TokenGenerationType } from '@neo/domain/refresh-token';
+import { logger } from '@neo/express-tools/logger';
+import { loginCookieOptions, refreshCookieName } from '../user.config';
 import { serialize } from 'cookie';
 
 describe('User API Endpoints', () => {
@@ -45,7 +47,9 @@ describe('User API Endpoints', () => {
     it('should return a user for a valid ID', async () => {
       // Arrange
       const app = getApp();
-      const testId = '1';
+      const testId = seedData.users[0]?.id;
+      if (!testId) throw new Error('Invalid test data: testId is undefined');
+
       const expectedUser = seedData.users.find((user) => user.id === testId);
 
       // Act
@@ -123,7 +127,7 @@ describe('User API Endpoints', () => {
   });
 
   describe('GET /users/login', () => {
-    it('should login successfully and return null', async () => {
+    it('should login successfully and return accessToken', async () => {
       // Arrange
       const app = getApp();
       const existing = {
@@ -137,7 +141,8 @@ describe('User API Endpoints', () => {
 
       // Assert
       expect(response.statusCode).toEqual(StatusCodes.OK);
-      expect(responseBody).toEqual({});
+      expect(responseBody.accessToken).toBeTruthy();
+      compareUsers(seedData.users[1], responseBody.user);
 
       const cookieHeader = response.headers['Set-Cookie'] as string;
 
@@ -164,6 +169,26 @@ describe('User API Endpoints', () => {
     });
   });
 
+  describe('POST /users/token', () => {
+    it('should refresh the access token', async () => {
+      // Arrange
+      const app = getApp();
+      const existing = {
+        email: bob?.email || '',
+        password: 'qwerty' // will generate passwordHash of users[1]?.passwordHash
+      };
+      const refreshCookie = serialize(refreshCookieName, seedData.refreshToken.token, loginCookieOptions);
+
+      // Act
+      const response = await request(app as App).post('/users/token').set('Cookie', refreshCookie).send(existing);
+      const responseBody = response.body as LoginUserResponse;
+
+      // Assert
+      expect(response.statusCode).toEqual(StatusCodes.OK);
+      expect(responseBody.accessToken).toBeTruthy();
+    });
+  });
+
   describe('GET /users/me', () => {
     it('should return unauthorized error', async () => {
       // Arrange
@@ -179,19 +204,16 @@ describe('User API Endpoints', () => {
     it('should return user info when authenticated', async () => {
       // Arrange
       const app = getApp();
-      const payload = {
-        id: bob?.id || '',
-        email: bob?.email || '',
-        lastLoginAt: bob?.lastLoginAt || new Date(),
+      const payload: AccessTokenPayload = {
+        userId: bob?.id || '',
+        generatedBy: TokenGenerationType.UserCredentials
       };
 
-      const tokenService = new JwtTokenService({ envConfig });
-      const token = tokenService.generateToken(payload);
-
-      const authCookie = serialize(authCookieName, token, authCookieOptions);
+      const tokenService = new JwtTokenService({ envConfig, logger });
+      const token = tokenService.generateAccessToken(payload);
 
       // Act
-      const response = await request(app as App).get('/users/me').set('Cookie', authCookie);
+      const response = await request(app as App).get('/users/me').set('Authorization', `Bearer ${token}`);
       const responseBody = response.body as UserDetailsResponse;
 
       // Assert

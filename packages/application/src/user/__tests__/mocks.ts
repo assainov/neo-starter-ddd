@@ -1,9 +1,10 @@
-import { IEncryptionService, ITokenService, IUserRepository, User } from '@neo/domain/user';
+import { IEncryptionService, IUserRepository, User } from '@neo/domain/user';
 import { vi } from 'vitest';
 import { IDatabase, ILogger } from '../../interfaces';
+import { ITokenRepository, ITokenService, RefreshToken } from '@neo/domain/refresh-token';
 
 export const mockUsers = [
-  new User({
+  User.toClass({
     id: '1',
     firstName: 'John',
     lastName: 'Doe',
@@ -14,10 +15,10 @@ export const mockUsers = [
     lastLoginAt: new Date(),
     loginsCount: 1,
     passwordHash: 'hashedpassword',
-    username: 'johndoe'
+    username: 'johndoe',
   }),
-  new User({
-    id: '1',
+  User.toClass({
+    id: '2',
     firstName: 'Jane',
     lastName: 'Smith',
     email: 'jane.smith@example.com',
@@ -27,9 +28,19 @@ export const mockUsers = [
     lastLoginAt: new Date(),
     loginsCount: 1,
     passwordHash: 'hashedpassword',
-    username: 'janesmith'
+    username: 'janesmith',
   })
 ];
+
+export const mockToken = RefreshToken.toClass({
+  id: '123',
+  token: 'myMockToken',
+  expiresAt: new Date(),
+  createdAt: new Date(),
+  lastUsedAt: new Date(),
+  revokedAt: null,
+  userId: '1'
+});
 
 export const mockEncryptionService: IEncryptionService = {
   hashPassword: vi.fn(),
@@ -37,7 +48,12 @@ export const mockEncryptionService: IEncryptionService = {
 };
 
 export const mockTokenService: ITokenService = {
-  generateToken: vi.fn()
+  generateAccessToken: vi.fn(),
+  generateRefreshToken: vi.fn(),
+  accessTokenExpiryMinutes: 2,
+  refreshExpiryDays: 1,
+  verifyAccessToken: vi.fn(),
+  verifyRefreshToken: vi.fn(),
 };
 
 export const mockUserRepository: IUserRepository = {
@@ -48,8 +64,16 @@ export const mockUserRepository: IUserRepository = {
   update: vi.fn()
 };
 
+export const mockTokenRepository: ITokenRepository = {
+  delete: vi.fn(),
+  getById: vi.fn(),
+  create: vi.fn(),
+  update: vi.fn()
+};
+
 export const mockDb: IDatabase = {
   userRepository: mockUserRepository,
+  tokenRepository: mockTokenRepository,
   disconnect: vi.fn()
 };
 

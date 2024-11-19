@@ -1,10 +1,11 @@
 import jwt from 'jsonwebtoken';
 import { RequestHandler } from 'express';
 import { logger } from '@neo/express-tools/logger';
-import { TokenPayload } from '@neo/domain/user';
 import { envConfig } from '../envConfig';
 import { UnauthorizedError } from '@neo/common-entities';
-import { authCookieName } from '@/user/user.config';
+import { AccessTokenPayload } from '@neo/domain/refresh-token';
+
+const PART_AFTER_BEARER = 7;
 
 /**
  * Middleware to authenticate a user based on the Authorization header.
@@ -14,18 +15,23 @@ import { authCookieName } from '@/user/user.config';
  * });
  */
 export const authenticate: RequestHandler<unknown, unknown, unknown, unknown> = (req, res, next) => {
-  const accessToken = req.cookies[authCookieName];
-
-  if (!accessToken) {
+  const header = req.header('Authorization');
+  if (!header) {
     throw new UnauthorizedError('Authorization failed');
   }
 
+  if (!header.startsWith('Bearer ')) {
+    throw new UnauthorizedError('Invalid authorization header');
+  }
+
   try {
-    const payload = jwt.verify(accessToken, envConfig.JWT_SECRET);
+    const accessToken = header.slice(PART_AFTER_BEARER);
+
+    const payload = jwt.verify(accessToken, envConfig.ACCESS_TOKEN_SECRET);
 
     if (!payload) throw new UnauthorizedError('Invalid token');
 
-    req.tokenPayload = payload as TokenPayload;
+    req.tokenPayload = payload as AccessTokenPayload;
     next();
   } catch (error) {
     logger.error(error);

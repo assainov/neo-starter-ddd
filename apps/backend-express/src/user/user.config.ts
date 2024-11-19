@@ -1,7 +1,7 @@
 import { envConfig } from '@/_server/envConfig';
 import { SerializeOptions } from 'cookie';
 
-export const authCookieName = 'app_token';
+export const refreshCookieName = 'app_token';
 
 /**
  * Configuration options for the authentication cookie.
@@ -17,7 +17,6 @@ export const loginCookieOptions: SerializeOptions = {
   httpOnly: true,
   sameSite: 'strict',
   secure: envConfig.isProduction,
-  maxAge: 60 * 60 * 24 * 30,
   path: '/',
 };
 

@@ -10,7 +10,7 @@ export default () => {
       .withUsername(url.username)
       .withPassword(url.password)
       .withDatabase(url.pathname.slice(1)) // remove leading slash
-      .withExposedPorts({ container: parseInt(url.port), host: parseInt(url.port) })
+      .withExposedPorts({ container: 5432, host: parseInt(url.port) })
       .start();
 
     await runLatestMigrations();

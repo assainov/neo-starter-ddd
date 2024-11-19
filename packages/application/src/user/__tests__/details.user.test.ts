@@ -7,30 +7,30 @@ import { userDetailsHandler } from '../details.user.handler';
 describe('User', () => {
   describe('My Details', () => {
     it('should return my details when I send email', async () => {
-      const email = 'john.doe@example.com';
-      const mockUser = mockUsers.find(u => u.email === email) as UserDto;
+      const userId = '1';
+      const mockUser = mockUsers.find(u => u.id === userId) as UserDto;
 
       const di = {
         ...mockServices,
         db: { ...mockServices.db,
           userRepository: { ...mockServices.db.userRepository,
-            getByEmail: vi.fn().mockReturnValue(mockUser) } } };
+            getById: vi.fn().mockReturnValue(mockUser) } } };
 
-      const user = await userDetailsHandler({ di, email });
+      const user = await userDetailsHandler({ di, userId });
 
       expect(user).toBeDefined();
       compareUserDtos(user, mockUser);
     });
     it('should throw an error when email is not found', async () => {
-      const email = 'random@gmail.com';
+      const userId = '1';
 
       const di = {
         ...mockServices,
         db: { ...mockServices.db,
           userRepository: { ...mockServices.db.userRepository,
-            getByEmail: vi.fn().mockReturnValue(undefined) } } };
+            getById: vi.fn().mockReturnValue(undefined) } } };
 
-      await expect(userDetailsHandler({ di, email })).rejects.toThrow('Invalid email or password');
+      await expect(userDetailsHandler({ di, userId })).rejects.toThrow('Invalid email or password');
     });
   });
 });

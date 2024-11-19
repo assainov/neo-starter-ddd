@@ -3,7 +3,8 @@
   "ui": "tui",
   "globalEnv": [
     "NODE_ENV",
-    "LOG_LEVEL"
+    "LOG_LEVEL",
+    "DATABASE_URL"
   ],
   "tasks": {
     "build": {
@@ -38,11 +39,6 @@
         "^lint:fix"
       ]
     },
-    "schema:generate": {
-      "dependsOn": [
-        "^schema:generate"
-      ]
-    },
     "start": {
       "dependsOn": [
         "^start"
@@ -51,6 +47,14 @@
     "test": {
       "dependsOn": [
         "^test"
+      ],
+      "env": [
+        "VITEST"
+      ]
+    },
+    "test:watch": {
+      "dependsOn": [
+        "^test:watch"
       ],
       "env": [
         "VITEST"

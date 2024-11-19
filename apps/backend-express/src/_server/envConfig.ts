@@ -47,7 +47,10 @@ const validationSchema = z.object({
     ])
     .default('info'),
 
-  JWT_SECRET: z.string().min(1),
+  ACCESS_TOKEN_SECRET: z.string().min(1),
+  REFRESH_TOKEN_SECRET: z.string().min(1),
+  ACCESS_EXPIRY_MINUTES: z.coerce.number().min(1).default(10),
+  REFRESH_EXPIRY_DAYS: z.coerce.number().min(1).default(30),
 
   isProduction: z.boolean().default(false),
 });

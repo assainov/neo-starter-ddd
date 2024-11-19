@@ -8,10 +8,10 @@ export const userDetailsResponseSchema = userDtoSchema;
 
 export type UserDetailsResponse = z.infer<typeof userDetailsResponseSchema>;
 
-export const userDetailsHandler = async ({ di, email }: { di: IUserDI; email?: string }) => {
-  if (!email) throw new InternalServerError('Email not found in token payload');
+export const userDetailsHandler = async ({ di, userId }: { di: IUserDI; userId?: string }) => {
+  if (!userId) throw new InternalServerError('userId not found in token payload');
 
-  const user = await di.db.userRepository.getByEmail(email);
+  const user = await di.db.userRepository.getById(userId);
 
   if (!user) throw new BadRequestError('Invalid email or password');
 

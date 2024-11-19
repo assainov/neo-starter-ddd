@@ -20,3 +20,13 @@ model User {
   avatarUrl String?
   passwordHash String
 }
+
+model RefreshToken {
+  id      String   @id @default(uuid())
+  token   String   @unique
+  expiresAt DateTime
+  createdAt DateTime
+  lastUsedAt DateTime?
+  revokedAt DateTime?
+  userId  String
+}

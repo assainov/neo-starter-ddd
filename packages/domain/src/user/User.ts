@@ -1,7 +1,7 @@
 import { SerializedUser } from './value-objects/SerializedUser';
-import { LoginResult } from './value-objects/LoginResult';
-import { IEncryptionService, ITokenService } from './interfaces';
+import { IEncryptionService } from './interfaces';
 import { RegisterParams } from './value-objects';
+import { Result, result } from '@neo/common-entities';
 
 export class User {
   #props: SerializedUser;
@@ -47,7 +47,7 @@ export class User {
     return new User(user);
   }
 
-  public constructor(props: SerializedUser) {
+  private constructor(props: SerializedUser) {
     this.#props = props;
   }
 
@@ -58,11 +58,11 @@ export class User {
     const { firstName, lastName, email, password, avatarUrl, username: usernameOrNull } = params;
 
     if (!firstName || !lastName || !email || !password) {
-      throw new Error('domain/user/validation: Missing required fields');
+      return result.fail('domain/user/validation: Missing required fields');
     }
 
     if (!User.isValidEmail(email)) {
-      throw new Error('domain/user/validation: Invalid email address');
+      return result.fail('domain/user/validation: Invalid email address');
     }
 
     const passwordHash = await encryptionService.hashPassword(password);
@@ -74,7 +74,7 @@ export class User {
 
     const username = usernameOrNull || User.generateUsername(firstName, lastName);
 
-    return new User({
+    return result.succeed(new User({
       id: undefined,
       firstName,
       lastName,
@@ -85,30 +85,34 @@ export class User {
       loginsCount,
       username,
       passwordHash,
-      avatarUrl
-    });
+      avatarUrl,
+    }));
   }
 
-  public async login(password: string, encryptionService: IEncryptionService, tokenService: ITokenService): Promise<LoginResult> {
+  public async login(password: string, encryptionService: IEncryptionService) {
     const isPasswordValid = await encryptionService.comparePassword(password, this.passwordHash);
     if (!isPasswordValid) {
-      return { error: 'Invalid email or password' };
+      return result.fail('Invalid email or password');
+    }
+
+    if (!this.id) {
+      return result.fail('User ID is missing');
     }
 
     this.lastLoginAt = new Date();
     this.loginsCount += 1;
     this.updatedAt = new Date();
 
-    return { accessToken: this.generateAccessToken(tokenService) };
+    return result.succeed(true);
   }
 
-  public changeBasicDetails(firstName: string, lastName: string, email: string, avatarUrl?: string): void {
+  public changeBasicDetails(firstName: string, lastName: string, email: string, avatarUrl?: string): Result<boolean, string> {
     if (!firstName || !lastName || !email) {
-      throw new Error('domain/user/validation: Missing required fields');
+      return result.fail('Missing required fields');
     }
 
     if (!User.isValidEmail(email)) {
-      throw new Error('domain/user/validation: Invalid email address');
+      return result.fail('Invalid email address');
     }
 
     this.firstName = firstName;
@@ -116,20 +120,8 @@ export class User {
     this.email = email;
     this.avatarUrl = avatarUrl;
     this.updatedAt = new Date();
-  }
 
-  private generateAccessToken(tokenService: ITokenService): string {
-    if (!this.id) {
-      throw new Error('domain/user: User ID is required to generate access token');
-    }
-
-    const payload = {
-      id: this.id,
-      email: this.email,
-      lastLoginAt: this.lastLoginAt,
-    };
-
-    return tokenService.generateToken(payload);
+    return result.succeed(true);
   }
 
   private static isValidEmail(email: string): boolean {

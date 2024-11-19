@@ -15,36 +15,37 @@ class UserRepository implements IUserRepository {
 
   public async getAll() {
     const dbUsers = await this._prisma.user.findMany();
-    return dbUsers.map(u => new User(u));
+    return dbUsers.map(u => User.toClass(u));
   }
 
   public async getById(id: string) {
+
     const dbUser = await this._prisma.user.findUnique({
-      where: { id }
+      where: { id },
     });
 
     if (!dbUser) return null;
 
-    return new User(dbUser);
+    return User.toClass(dbUser);
   }
 
   public async getByEmail(email: string) {
     const dbUser = await this._prisma.user.findFirst({
-      where: { email }
+      where: { email },
     });
 
     if (!dbUser) return null;
 
-    return new User(dbUser);
+    return User.toClass(dbUser);
   }
 
   public async create(user: User) {
     try {
       const dbUser = await this._prisma.user.create({
-        data: user.toJSON()
+        data: user.toJSON(),
       });
 
-      return new User(dbUser);
+      return User.toClass(dbUser);
     } catch (e: unknown) {
       if (!isKnownError(e)) throw e;
 
@@ -69,7 +70,7 @@ class UserRepository implements IUserRepository {
       data: user.toJSON()
     });
 
-    return new User(dbUser);
+    return User.toClass(dbUser);
   }
 }
 

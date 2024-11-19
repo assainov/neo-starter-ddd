@@ -8,9 +8,10 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
-    "schema:generate": "turbo schema:generate",
     "start": "turbo start",
-    "test": "turbo test"
+    "test": "turbo test",
+    "test:watch": "turbo test:watch",
+    "postinstall": "cd packages/persistence && prisma generate"
   },
   "devDependencies": {
     "prettier": "^3.2.5",

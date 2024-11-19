@@ -19,6 +19,7 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
+    "@neo/common-entities": "*",
     "@neo/domain": "*",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2"

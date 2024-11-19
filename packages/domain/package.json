@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    "./user": "./src/user/index.ts"
+    "./user": "./src/user/index.ts",
+    "./refresh-token": "./src/refresh-token/index.ts"
   },
   "scripts": {
     "clean": "rm -rf node_modules && rm -rf dist",
@@ -14,5 +15,8 @@
     "@neo/typescript-config": "*",
     "@types/node": "^20.11.24",
     "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@neo/common-entities": "*"
   }
 }
