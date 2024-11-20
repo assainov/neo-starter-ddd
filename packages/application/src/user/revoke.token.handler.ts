@@ -23,7 +23,7 @@ export const revokeTokenHandler = async ({ di, id }: { id: string; di: IUserDI; 
     throw new BadRequestError('Refresh token to revoke was not found in the database');
   }
 
-  token.revoke();
+  token.revokeToken();
 
   await di.db.tokenRepository.update(token);
 

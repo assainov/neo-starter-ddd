@@ -33,7 +33,7 @@ export const refreshTokenHandler = async ({ di, refreshToken }: { refreshToken: 
     throw new UnauthorizedError('Invalid refresh token');
   }
 
-  const result = storedRefreshToken.generateAccessToken(di.tokenService, TokenGenerationType.RefreshToken);
+  const result = storedRefreshToken.createAccessToken(di.tokenService, TokenGenerationType.RefreshToken);
 
   if (!result.isSuccess) throw new InternalServerError(result.error);
 

@@ -39,7 +39,7 @@ export class RefreshToken {
     this.#props = props;
   }
 
-  public static generateTokens(
+  public static createTokens(
     tokenService: ITokenService,
     userId?: string,
   ) {
@@ -61,14 +61,14 @@ export class RefreshToken {
       token
     });
 
-    const accessTokenResult = refreshTokenInstance.generateAccessToken(tokenService, TokenGenerationType.UserCredentials);
+    const accessTokenResult = refreshTokenInstance.createAccessToken(tokenService, TokenGenerationType.UserCredentials);
 
     if (!accessTokenResult.isSuccess) return result.fail(accessTokenResult.error);
 
     return result.succeed({ refreshTokenInstance, accessToken: accessTokenResult.data });
   }
 
-  public generateAccessToken(tokenService: ITokenService, generatedBy: TokenGenerationType) {
+  public createAccessToken(tokenService: ITokenService, generatedBy: TokenGenerationType) {
     if (!this.userId) {
       return result.fail('userId cannot be empty');
     }
@@ -83,7 +83,7 @@ export class RefreshToken {
     return result.succeed(tokenService.generateAccessToken(payload));
   }
 
-  public revoke(): Result<boolean, string> {
+  public revokeToken(): Result<boolean, string> {
     if (this.revokedAt) {
       return result.fail('refresh token is already revoked');
     }

@@ -35,7 +35,7 @@ export const loginUserHandler = async ({ di, loginDto }: { loginDto: LoginUserBo
 
   if (!loginResult.isSuccess) throw new InternalServerError(loginResult.error);
 
-  const generationResult = RefreshToken.generateTokens(di.tokenService, user.id);
+  const generationResult = RefreshToken.createTokens(di.tokenService, user.id);
 
   if (!generationResult.isSuccess) throw new InternalServerError(generationResult.error);
 
