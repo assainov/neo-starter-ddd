@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { mockServices, mockUsers } from './mocks';
 import { UserDto } from '../common.dto';
 import { getUserHandler } from '../get.user.handler';
@@ -9,14 +9,9 @@ describe('User', () => {
     it('should return the user', async () => {
       const id = '1';
       const mockUser = mockUsers.find(u => u.id === id) as UserDto;
+      mockServices.db.userRepository.getById.mockReturnValue(mockUser);
 
-      const di = {
-        ...mockServices,
-        db: { ...mockServices.db,
-          userRepository: { ...mockServices.db.userRepository,
-            getById: vi.fn().mockReturnValue(mockUser) } } };
-
-      const user = await getUserHandler({ di, id });
+      const user = await getUserHandler({ di: { ...mockServices }, id });
 
       expect(user).toBeDefined();
       compareUserDtos(user as UserDto, mockUser);
@@ -24,14 +19,9 @@ describe('User', () => {
 
     it('should throw an error when user is not found', async () => {
       const id = '1';
+      mockServices.db.userRepository.getById.mockReturnValue(undefined);
 
-      const di = {
-        ...mockServices,
-        db: { ...mockServices.db,
-          userRepository: { ...mockServices.db.userRepository,
-            getById: vi.fn().mockReturnValue(undefined) } } };
-
-      await expect(getUserHandler({ di, id })).rejects.toThrow('User not found');
+      await expect(getUserHandler({ di: { ...mockServices }, id })).rejects.toThrow('User not found');
     });
 
   });

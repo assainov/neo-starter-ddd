@@ -1,0 +1,51 @@
+### Get current user
+
+GET http://localhost:8080/auth/my-profile HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjNmQzNmY3YS1hYjIzLTQxMDEtODMxOC1mNmQ4OWE5MGIxZWYiLCJnZW5lcmF0ZWRCeSI6IlVzZXJDcmVkZW50aWFscyIsImlhdCI6MTczMjIxMzMyNCwiZXhwIjoxNzMyMjEzNjI0fQ.WHHiZLzoa3SGqR4guufhH10bb_QPczeT1vpAosbsb5E
+
+### Register user
+
+POST http://localhost:8080/auth/register HTTP/1.1
+content-type: application/json
+
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john@doe.com",
+    "password": "qwerty"
+}
+
+### Login user
+
+POST http://localhost:8080/auth/login HTTP/1.1
+content-type: application/json
+
+{
+    "email": "john@doe.com",
+    "password": "qwerty"
+}
+
+### Refresh access token
+
+POST http://localhost:8080/auth/token HTTP/1.1
+content-type: application/json
+
+
+
+### Logout user
+
+POST http://localhost:8080/auth/logout HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3M2Q2YWVhOC1jMjNkLTQ4Y2QtOTZjMC0yNThiN2RlZTcxMTQiLCJnZW5lcmF0ZWRCeSI6IlJlZnJlc2hUb2tlbiIsImlhdCI6MTczMjIxMzc0NiwiZXhwIjoxNzMyMjE0MDQ2fQ.XOWF2xE_rPtwORN0lYL8zvKTxjGRSzRJo49aGU8c2J4
+
+
+### Revoke token
+
+POST http://localhost:8080/auth/token/revoke HTTP/1.1
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3M2Q2YWVhOC1jMjNkLTQ4Y2QtOTZjMC0yNThiN2RlZTcxMTQiLCJnZW5lcmF0ZWRCeSI6IlJlZnJlc2hUb2tlbiIsImlhdCI6MTczMjIxMzc0NiwiZXhwIjoxNzMyMjE0MDQ2fQ.XOWF2xE_rPtwORN0lYL8zvKTxjGRSzRJo49aGU8c2J4
+
+{
+  "id": "0aec8c50-d90d-46d5-b893-70f5ec48a8ea"
+}

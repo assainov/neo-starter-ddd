@@ -1,20 +1,10 @@
-import path from 'node:path';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { defineConfig } from 'vitest/config';
 import dotenv from 'dotenv';
-
-const getFilename = () => {
-  const env = process.env.NODE_ENV;
-
-  if (!env || env === 'development') {
-    return '.env';
-  }
-
-  return `.env.${env}`;
-};
+import path from 'node:path';
 
 dotenv.config({
-  path: path.resolve(__dirname, `./${getFilename()}`)
+  path: path.resolve(__dirname, './.env.test')
 });
 
 export default defineConfig({
@@ -24,9 +14,7 @@ export default defineConfig({
     },
     globals: true,
     restoreMocks: true,
-    env: process.env,
-    fileParallelism: false,
-    hookTimeout: 60000, // For db container wait period
+    env: process.env
   },
   plugins: [ tsconfigPaths() ],
 });

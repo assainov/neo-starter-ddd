@@ -1,7 +1,7 @@
 import { BaseUserProps } from './BaseUserProps';
 
 export type SerializedUser = Omit<BaseUserProps, 'username'> & {
-  id?: string;
+  id: string;
   createdAt: Date;
   updatedAt: Date;
   lastLoginAt: Date;

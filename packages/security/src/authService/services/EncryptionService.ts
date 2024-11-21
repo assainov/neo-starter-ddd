@@ -1,5 +1,5 @@
-import { IEncryptionService } from '@neo/domain/user';
 import bcrypt from 'bcryptjs';
+import { IEncryptionService } from './IEncryptionService';
 
 export class EncryptionService implements IEncryptionService {
   public async hashPassword(password: string) {

@@ -4,7 +4,11 @@
   "globalEnv": [
     "NODE_ENV",
     "LOG_LEVEL",
-    "DATABASE_URL"
+    "DATABASE_URL",
+    "ACCESS_TOKEN_SECRET",
+    "REFRESH_TOKEN_SECRE",
+    "ACCESS_EXPIRY_MINUTES",
+    "REFRESH_EXPIRY_DAYS"
   ],
   "tasks": {
     "build": {

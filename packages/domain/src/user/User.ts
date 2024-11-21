@@ -1,13 +1,13 @@
+import { randomUUID } from 'node:crypto';
 import { SerializedUser } from './value-objects/SerializedUser';
-import { IEncryptionService } from './interfaces';
-import { RegisterParams } from './value-objects';
 import { Result, result } from '@neo/common-entities';
+import { RegisterParams } from './value-objects/RegisterParams';
 
 export class User {
   #props: SerializedUser;
 
-  public get id(): string | undefined { return this.#props.id; }
-  private set id(value: string | undefined) { this.#props.id = value; }
+  public get id(): string { return this.#props.id; }
+  private set id(value: string) { this.#props.id = value; }
 
   public get firstName(): string { return this.#props.firstName; }
   private set firstName(value: string) { this.#props.firstName = value; }
@@ -51,21 +51,16 @@ export class User {
     this.#props = props;
   }
 
-  public static async register(
-    params: RegisterParams,
-    encryptionService: IEncryptionService
-  ) {
-    const { firstName, lastName, email, password, avatarUrl, username: usernameOrNull } = params;
+  public static create(params: RegisterParams) {
+    const { firstName, lastName, email, avatarUrl, username: usernameOrNull, passwordHash } = params;
 
-    if (!firstName || !lastName || !email || !password) {
-      return result.fail('domain/user/validation: Missing required fields');
+    if (!firstName || !lastName || !email || !passwordHash) {
+      throw new Error('domain/user/validation: Missing required fields');
     }
 
     if (!User.isValidEmail(email)) {
-      return result.fail('domain/user/validation: Invalid email address');
+      throw new Error('domain/user/validation: Invalid email address');
     }
-
-    const passwordHash = await encryptionService.hashPassword(password);
 
     const createdAt = new Date();
     const updatedAt = new Date();
@@ -74,8 +69,8 @@ export class User {
 
     const username = usernameOrNull || User.generateUsername(firstName, lastName);
 
-    return result.succeed(new User({
-      id: undefined,
+    return new User({
+      id: randomUUID(),
       firstName,
       lastName,
       email,
@@ -86,15 +81,10 @@ export class User {
       username,
       passwordHash,
       avatarUrl,
-    }));
+    });
   }
 
-  public async login(password: string, encryptionService: IEncryptionService) {
-    const isPasswordValid = await encryptionService.comparePassword(password, this.passwordHash);
-    if (!isPasswordValid) {
-      return result.fail('Invalid email or password');
-    }
-
+  public async onLogin() {
     if (!this.id) {
       return result.fail('User ID is missing');
     }

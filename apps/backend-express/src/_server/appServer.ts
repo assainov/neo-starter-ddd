@@ -15,6 +15,7 @@ import { BaseServer } from './helpers/baseServer';
 import { healthCheckRouter } from '@neo/express-tools/health-check';
 import { initializeOpenAPIModule } from '@neo/express-tools/swagger';
 import { initializeUserModule } from '@/user/user.module';
+import { initializeAuthModule } from '@/auth/auth.module';
 
 export class AppServer extends BaseServer {
   public constructor(props: Registry) {
@@ -44,11 +45,13 @@ export class AppServer extends BaseServer {
 
     // Routes
     const { userRouter, userRegistry } = initializeUserModule({ container: this._container });
-    this.app.use('/health', healthCheckRouter);
     this.app.use('/users', userRouter);
+    const { authRouter, authRegistry } = initializeAuthModule({ container: this._container });
+    this.app.use('/auth', authRouter);
+    this.app.use('/health', healthCheckRouter);
 
     // Swagger UI
-    const { openAPIRouter } = initializeOpenAPIModule(userRegistry);
+    const { openAPIRouter } = initializeOpenAPIModule(userRegistry, authRegistry);
     this.app.use(openAPIRouter);
 
     // Error handlers

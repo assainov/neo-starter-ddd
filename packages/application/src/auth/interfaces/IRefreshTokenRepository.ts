@@ -1,6 +1,6 @@
-import { RefreshToken } from '../RefreshToken';
+import { RefreshToken } from './RefreshToken';
 
-export interface ITokenRepository {
+export interface IRefreshTokenRepository {
   getById: (id: string) => Promise<RefreshToken | null>;
   update: (token: RefreshToken) => Promise<RefreshToken>;
   create: (token: RefreshToken) => Promise<RefreshToken>;

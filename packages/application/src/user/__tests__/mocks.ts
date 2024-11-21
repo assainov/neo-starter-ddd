@@ -1,7 +1,7 @@
-import { IEncryptionService, IUserRepository, User } from '@neo/domain/user';
+import { User } from '@neo/domain/user';
 import { vi } from 'vitest';
-import { IDatabase, ILogger } from '../../interfaces';
-import { ITokenRepository, ITokenService, RefreshToken } from '@neo/domain/refresh-token';
+import { ILogger } from '../../interfaces';
+import { IRefreshTokenRepository } from '../../auth';
 
 export const mockUsers = [
   User.toClass({
@@ -32,31 +32,7 @@ export const mockUsers = [
   })
 ];
 
-export const mockToken = RefreshToken.toClass({
-  id: '123',
-  token: 'myMockToken',
-  expiresAt: new Date(),
-  createdAt: new Date(),
-  lastUsedAt: new Date(),
-  revokedAt: null,
-  userId: '1'
-});
-
-export const mockEncryptionService: IEncryptionService = {
-  hashPassword: vi.fn(),
-  comparePassword: vi.fn()
-};
-
-export const mockTokenService: ITokenService = {
-  generateAccessToken: vi.fn(),
-  generateRefreshToken: vi.fn(),
-  accessTokenExpiryMinutes: 2,
-  refreshExpiryDays: 1,
-  verifyAccessToken: vi.fn(),
-  verifyRefreshToken: vi.fn(),
-};
-
-export const mockUserRepository: IUserRepository = {
+export const mockUserRepository = {
   getAll: vi.fn(),
   getByEmail: vi.fn(),
   getById: vi.fn(),
@@ -64,16 +40,16 @@ export const mockUserRepository: IUserRepository = {
   update: vi.fn()
 };
 
-export const mockTokenRepository: ITokenRepository = {
+export const mockTokenRepository: IRefreshTokenRepository = {
   delete: vi.fn(),
   getById: vi.fn(),
   create: vi.fn(),
   update: vi.fn()
 };
 
-export const mockDb: IDatabase = {
+export const mockDb = {
   userRepository: mockUserRepository,
-  tokenRepository: mockTokenRepository,
+  refreshTokenRepository: mockTokenRepository,
   disconnect: vi.fn()
 };
 
@@ -87,8 +63,6 @@ export const mockLogger: ILogger = {
 };
 
 export const mockServices = {
-  encryptionService: mockEncryptionService,
-  tokenService: mockTokenService,
   db: mockDb,
   logger: mockLogger,
 };

@@ -1,15 +1,14 @@
+import { IRefreshTokenRepository, RefreshToken } from '@neo/application/auth';
 import { PrismaClient } from '@prisma/client';
-import { RefreshToken } from '../../../domain/src/refresh-token/RefreshToken';
-import { ITokenRepository } from '@neo/domain/refresh-token';
 
-class TokenRepository implements ITokenRepository {
+export class RefreshTokenRepository implements IRefreshTokenRepository {
   private _prisma: PrismaClient;
 
   public constructor(prismaClient: PrismaClient) {
     this._prisma = prismaClient;
   }
 
-  public async getById(id: string) {
+  public async getById(id: string): Promise<RefreshToken | null> {
 
     const dbToken = await this._prisma.refreshToken.findUnique({
       where: { id },
@@ -17,24 +16,24 @@ class TokenRepository implements ITokenRepository {
 
     if (!dbToken) return null;
 
-    return RefreshToken.toClass(dbToken);
+    return dbToken;
   }
 
-  public async create(refreshToken: RefreshToken) {
+  public async create(refreshToken: RefreshToken): Promise<RefreshToken> {
     const dbToken = await this._prisma.refreshToken.create({
-      data: refreshToken.toJSON(),
+      data: refreshToken,
     });
 
-    return RefreshToken.toClass(dbToken);
+    return dbToken;
   }
 
-  public async update(refreshToken: RefreshToken) {
+  public async update(refreshToken: RefreshToken): Promise<RefreshToken> {
     const dbToken = await this._prisma.refreshToken.update({
       where: { id: refreshToken.id },
-      data: refreshToken.toJSON(),
+      data: refreshToken,
     });
 
-    return RefreshToken.toClass(dbToken);
+    return dbToken;
   }
 
   public async delete(id: string) {
@@ -43,5 +42,3 @@ class TokenRepository implements ITokenRepository {
     });
   }
 }
-
-export default TokenRepository;

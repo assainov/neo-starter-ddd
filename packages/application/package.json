@@ -4,6 +4,7 @@
   "private": true,
   "exports": {
     "./user": "./src/user/index.ts",
+    "./auth": "./src/auth/index.ts",
     "./interfaces": "./src/interfaces/index.ts"
   },
   "scripts": {

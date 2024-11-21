@@ -1,8 +1,8 @@
 import { UnauthorizedError } from '@neo/common-entities';
-import { AccessTokenPayload, ITokenService, RefreshTokenPayload } from '@neo/domain/refresh-token';
 import jwt from 'jsonwebtoken';
+import { AccessTokenPayload, ITokenService, RefreshTokenPayload } from './ITokenService';
 
-class JwtTokenService implements ITokenService {
+export class TokenService implements ITokenService {
   public accessTokenExpiryMinutes: number;
   public refreshExpiryDays: number;
 
@@ -88,5 +88,3 @@ class JwtTokenService implements ITokenService {
     }
   }
 }
-
-export default JwtTokenService;

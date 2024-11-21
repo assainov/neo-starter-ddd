@@ -1,4 +1,4 @@
-export type SerializedRefreshToken = {
+export type RefreshToken = {
   id: string;
   createdAt: Date;
   expiresAt: Date;

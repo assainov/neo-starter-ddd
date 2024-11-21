@@ -4,4 +4,5 @@ export type BaseUserProps = {
   email: string;
   avatarUrl?: string | null;
   username?: string;
+  passwordHash: string;
 };
