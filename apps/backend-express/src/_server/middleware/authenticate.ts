@@ -3,9 +3,8 @@ import { RequestHandler } from 'express';
 import { logger } from '@neo/express-tools/logger';
 import { envConfig } from '../envConfig';
 import { UnauthorizedError } from '@neo/common-entities';
-import { AccessTokenPayload } from '@neo/domain/refresh-token';
-
-const PART_AFTER_BEARER = 7;
+import { accessCookieName } from '@/auth/auth.config';
+import { AccessTokenPayload } from '@neo/security/authService';
 
 /**
  * Middleware to authenticate a user based on the Authorization header.
@@ -15,17 +14,9 @@ const PART_AFTER_BEARER = 7;
  * });
  */
 export const authenticate: RequestHandler<unknown, unknown, unknown, unknown> = (req, res, next) => {
-  const header = req.header('Authorization');
-  if (!header) {
-    throw new UnauthorizedError('Authorization failed');
-  }
-
-  if (!header.startsWith('Bearer ')) {
-    throw new UnauthorizedError('Invalid authorization header');
-  }
+  const accessToken = req.cookies[accessCookieName];
 
   try {
-    const accessToken = header.slice(PART_AFTER_BEARER);
 
     const payload = jwt.verify(accessToken, envConfig.ACCESS_TOKEN_SECRET);
 

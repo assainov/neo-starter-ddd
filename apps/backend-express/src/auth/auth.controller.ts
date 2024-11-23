@@ -24,7 +24,7 @@ import { StatusCodes } from 'http-status-codes';
 import { authenticate } from '@/_server/middleware/authenticate';
 import { validate } from '@neo/express-tools/validation';
 import { serialize } from 'cookie';
-import { refreshCookieName, loginCookieOptions, logoutCookieOptions } from './auth.config';
+import { refreshCookieName, loginCookieOptions, logoutCookieOptions, accessCookieName } from './auth.config';
 import { IAuthDI } from './auth.di';
 import { User } from '@neo/domain/user';
 
@@ -76,11 +76,12 @@ const createUserController = (di: IAuthDI) => (authRouter: Router) => {
     });
 
     const refreshTokenCookie = serialize(refreshCookieName, session.refreshToken, loginCookieOptions);
+    const accessTokenCookie = serialize(accessCookieName, session.accessToken, loginCookieOptions);
 
     res
       .status(StatusCodes.OK)
-      .setHeader('Set-Cookie', refreshTokenCookie)
-      .send(loginUserResponseSchema.parse({ accessToken: session.accessToken, user }));
+      .setHeader('Set-Cookie', [ refreshTokenCookie, accessTokenCookie ])
+      .send(loginUserResponseSchema.parse({ user }));
   });
 
   authRouter.post('/token', validate(refreshTokenRequestSchema), async (req: Request<never, RefreshTokenResponse, RefreshTokenBody, never>, res: Response<RefreshTokenResponse>) => {
@@ -94,9 +95,12 @@ const createUserController = (di: IAuthDI) => (authRouter: Router) => {
 
     });
 
+    const accessTokenCookie = serialize(accessCookieName, accessToken, loginCookieOptions);
+
     res
       .status(StatusCodes.OK)
-      .send(refreshTokenResponseSchema.parse({ accessToken }));
+      .setHeader('Set-Cookie', accessTokenCookie)
+      .send(refreshTokenResponseSchema.parse({ success: true }));
   });
 
   authRouter.post('/logout', authenticate, async (req: Request<never, LogoutUserResponse, never, never>, res: Response<LogoutUserResponse>) => {
@@ -113,10 +117,11 @@ const createUserController = (di: IAuthDI) => (authRouter: Router) => {
     // Clear the auth cookie
     const EMPTY = '';
     const refreshCookie = serialize(refreshCookieName, EMPTY, logoutCookieOptions);
+    const accessCookie = serialize(accessCookieName, EMPTY, logoutCookieOptions);
 
     res
       .status(StatusCodes.OK)
-      .setHeader('Set-Cookie', refreshCookie)
+      .setHeader('Set-Cookie', [ refreshCookie, accessCookie ])
       .send({ success: true });
   });
 

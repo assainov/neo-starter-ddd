@@ -7,7 +7,6 @@ export const loginUserBodySchema = z.object({
 });
 export const loginUserRequestSchema = z.object({ body: loginUserBodySchema });
 export const loginUserResponseSchema = z.object({
-  accessToken: z.string().min(1),
   user: userDtoSchema
 });
 

@@ -11,10 +11,11 @@ import { envConfig } from '@/_server/envConfig';
 import {
   RegisterUserResponse,
   LoginUserResponse,
-  UserDetailsResponse
+  UserDetailsResponse,
+  RefreshTokenResponse
 } from '@neo/application/auth';
 import { logger } from '@neo/express-tools/logger';
-import { loginCookieOptions, refreshCookieName } from '../auth.config';
+import { accessCookieName, loginCookieOptions, refreshCookieName } from '../auth.config';
 import { serialize } from 'cookie';
 import { AccessTokenPayload, TokenGenerationType, TokenService } from '@neo/security/authService';
 import { UserDto } from '@neo/application/user';
@@ -73,7 +74,7 @@ describe('Auth API Endpoints', () => {
   });
 
   describe('GET /auth/login', () => {
-    it('should login successfully and return accessToken', async () => {
+    it('should login successfully and return user', async () => {
       // Arrange
       const app = getApp();
       const existing = {
@@ -87,7 +88,6 @@ describe('Auth API Endpoints', () => {
 
       // Assert
       expect(response.statusCode).toEqual(StatusCodes.OK);
-      expect(responseBody.accessToken).toBeTruthy();
       compareUsers(seedData.users[1], responseBody.user);
 
       const cookieHeader = response.headers['Set-Cookie'] as string;
@@ -127,11 +127,11 @@ describe('Auth API Endpoints', () => {
 
       // Act
       const response = await request(app as App).post('/auth/token').set('Cookie', refreshCookie).send(existing);
-      const responseBody = response.body as LoginUserResponse;
+      const responseBody = response.body as RefreshTokenResponse;
 
       // Assert
       expect(response.statusCode).toEqual(StatusCodes.OK);
-      expect(responseBody.accessToken).toBeTruthy();
+      expect(responseBody.success).toBeTruthy();
     });
   });
 
@@ -157,9 +157,13 @@ describe('Auth API Endpoints', () => {
 
       const tokenService = new TokenService({ envConfig, logger });
       const token = tokenService.generateAccessToken(payload);
+      const accessTokenCookie = serialize(accessCookieName, token, loginCookieOptions);
 
       // Act
-      const response = await request(app as App).get('/auth/my-profile').set('Authorization', `Bearer ${token}`);
+      const response = await request(app as App)
+        .get('/auth/my-profile')
+        .set('Cookie', accessTokenCookie);
+
       const responseBody = response.body as UserDetailsResponse;
 
       // Assert

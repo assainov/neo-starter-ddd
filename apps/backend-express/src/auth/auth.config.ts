@@ -1,7 +1,9 @@
 import { envConfig } from '@/_server/envConfig';
 import { SerializeOptions } from 'cookie';
 
-export const refreshCookieName = 'app_token';
+export const refreshCookieName = 'app_refresh';
+
+export const accessCookieName = 'app_access';
 
 /**
  * Configuration options for the authentication cookie.
