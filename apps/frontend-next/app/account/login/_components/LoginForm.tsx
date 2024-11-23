@@ -2,7 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { loginUserBodySchema, LoginUserBody } from '@neo/application/user';
+import { loginUserBodySchema, LoginUserBody } from '@neo/application/auth';
 
 import { ROUTE } from '@/_config/routes';
 import { useNotifications } from '@/_shared/notifications';

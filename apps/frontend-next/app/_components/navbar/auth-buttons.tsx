@@ -3,16 +3,17 @@ import { UserPlus, LogIn, LogOut } from 'lucide-react';
 import { Button } from '../../_shared/ui/button';
 import { GitHubButton } from './github-button';
 import { ROUTE } from '../../_config/routes';
-import { useAuth } from '@/_hooks/useAuth';
 import { useLogout } from '@/_hooks/useLogoutAction';
+import { useAuth } from '@/_hooks/useAuth';
 
 export const AuthButtons = ({ className = '', onClose = () => {} }) => {
-  const { user, isAuthenticated, isLoggingIn } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+
   const logout = useLogout();
   return (
     <div className={`flex items-center space-x-2 ${className}`}>
       <GitHubButton className='hidden md:flex' />
-      { isLoggingIn ? 'Loading...' : isAuthenticated ? (
+      { isAuthenticated ? (
         <>
           <span>Welcome, {user?.firstName}</span>
           <Button

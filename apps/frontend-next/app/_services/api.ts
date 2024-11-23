@@ -1,7 +1,8 @@
 import { useNotifications } from '../_shared/notifications';
 import { env } from '../_config/env';
+import { isServer, buildUrlWithParams, getServerCookies, logResponse } from './api.utils';
 
-type RequestOptions = {
+export type RequestOptions = {
   method?: string;
   headers?: Record<string, string>;
   body?: unknown;
@@ -10,47 +11,13 @@ type RequestOptions = {
   cache?: RequestCache;
   next?: NextFetchRequestConfig;
   isSilent?: boolean;
+  enableTokenRefreshing?: boolean;
+  accessTokenOverride?: string;
 };
 
-function buildUrlWithParams(
-  url: string,
-  params?: RequestOptions['params'],
-): string {
-  if (!params) return url;
-  const filteredParams = Object.fromEntries(
-    Object.entries(params).filter(
-      ([ , value ]) => value !== undefined && value !== null,
-    ),
-  );
-  if (Object.keys(filteredParams).length === 0) return url;
-  const queryString = new URLSearchParams(
-    filteredParams as Record<string, string>,
-  ).toString();
-  return `${url}?${queryString}`;
-}
-
-// Create a separate function for getting server-side cookies that can be imported where needed
-export function getServerCookies() {
-  if (typeof window !== 'undefined') return '';
-
-  // Dynamic import next/headers only on server-side
-  return import('next/headers').then(async ({ cookies }) => {
-    try {
-      const cookieStore = await cookies();
-      return cookieStore
-        .getAll()
-        .map((c) => `${c.name}=${c.value}`)
-        .join('; ');
-    } catch (error) {
-      console.error('Failed to access cookies:', error);
-      return '';
-    }
-  });
-}
-
 async function fetchApi<T>(
-  url: string,
-  options: RequestOptions = {},
+  path: string,
+  initialOptions: RequestOptions = {},
 ): Promise<T> {
   const {
     method = 'GET',
@@ -60,18 +27,19 @@ async function fetchApi<T>(
     params,
     cache = 'no-store',
     next,
-    isSilent
-  } = options;
+    isSilent,
+    enableTokenRefreshing = true,
+  } = initialOptions;
+
+  const fullUrl = buildUrlWithParams(`${env.API_URL}${path}`, params);
 
   // Get cookies from the request when running on server
   let cookieHeader = cookie;
-  if (typeof window === 'undefined' && !cookie) {
+  if (isServer && !cookie) {
     cookieHeader = await getServerCookies();
   }
 
-  const fullUrl = buildUrlWithParams(`${env.API_URL}${url}`, params);
-
-  const response = await fetch(fullUrl, {
+  const options = {
     method,
     headers: {
       'Content-Type': 'application/json',
@@ -83,9 +51,29 @@ async function fetchApi<T>(
     credentials: 'include',
     cache,
     next,
-  });
+  };
+
+  const response = await fetch(fullUrl, options as RequestInit);
+
+  logResponse(method, path, response);
 
   if (!response.ok) {
+
+    const willRefreshToken = response.status === 401 && !isServer && enableTokenRefreshing;
+
+    if (willRefreshToken) {
+      const response = await fetch(`${env.API_URL}/auth/token`, { ...options, method: 'POST' } as RequestInit);
+
+      logResponse('POST', '/auth/token', response);
+
+      if (!response.ok) {
+        const message = (await response.json()).message || response.statusText;
+        throw new Error(message);
+      }
+
+      return await fetchApi<T>(path, { ...options, enableTokenRefreshing: false });
+    }
+
     const message = (await response.json()).message || response.statusText;
     if (typeof window !== 'undefined' && !isSilent) {
       useNotifications.getState().addNotification({

@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from '@/_shared/ui/card';
 import { ROUTE } from '@/_config/routes';
-import { RegisterUserBody, registerUserBodySchema } from '@neo/application/user';
+import { RegisterUserBody, registerUserBodySchema } from '@neo/application/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNotifications } from '@/_shared/notifications';
