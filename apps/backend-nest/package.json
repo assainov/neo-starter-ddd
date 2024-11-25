@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "prebuild": "npm run lint",
     "build": "nest build",
     "clean": "rm -rf node_modules && rm -rf dist",
     "dev": "nest start --watch",

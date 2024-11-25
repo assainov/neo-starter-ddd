@@ -8,7 +8,8 @@
     "ACCESS_TOKEN_SECRET",
     "REFRESH_TOKEN_SECRE",
     "ACCESS_EXPIRY_MINUTES",
-    "REFRESH_EXPIRY_DAYS"
+    "REFRESH_EXPIRY_DAYS",
+    "PORT"
   ],
   "tasks": {
     "build": {
